@@ -1,4 +1,7 @@
 import express from "express";
+import userRoutes from "../routes/user.route.js";
+import authRoutes from "../routes/auth.route.js";
+import { checkValidJWT } from "../middleware/jwt.middleware.js";
 
 const routes = (app) => {
   const router = express.Router();
@@ -7,7 +10,11 @@ const routes = (app) => {
     res.json({ message: "API is running" });
   });
 
-  app.use("/api", router);
+  // routes
+  router.use("/users", userRoutes);
+  router.use("/auth", authRoutes);
+
+  app.use("/api", checkValidJWT, router);
 };
 
 export default routes;
