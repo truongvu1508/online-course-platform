@@ -9,7 +9,8 @@ const checkValidJWT = (req, res, next) => {
     "/auth/resend-verification",
     "/auth/login",
     "/file",
-    "/files",
+    "/file/single",
+    "/file/multiple",
   ];
 
   const isWhiteList = whiteList.some((route) => route === path);

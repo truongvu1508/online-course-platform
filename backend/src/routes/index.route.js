@@ -2,6 +2,7 @@ import express from "express";
 import userRoutes from "../routes/user.route.js";
 import authRoutes from "../routes/auth.route.js";
 import { checkValidJWT } from "../middleware/jwt.middleware.js";
+import fileRouters from "./file.route.js";
 
 const routes = (app) => {
   const router = express.Router();
@@ -13,6 +14,7 @@ const routes = (app) => {
   // routes
   router.use("/users", userRoutes);
   router.use("/auth", authRoutes);
+  router.use("/file", fileRouters);
 
   app.use("/api", checkValidJWT, router);
 };
