@@ -27,10 +27,10 @@ const handleRegister = async (req, res) => {
     }
 
     // validate password strength
-    if (password.length < 8) {
+    if (password.length < 6) {
       return res.status(400).json({
         success: false,
-        message: "Mật khẩu phải có ít nhất 8 ký tự",
+        message: "Mật khẩu phải có ít nhất 6 ký tự",
       });
     }
 
@@ -222,6 +222,7 @@ const handleLogin = async (req, res, next) => {
     const payload = {
       id: user._id,
       email: user.email,
+      fullName: user.fullName,
       role: user.role,
     };
 
@@ -236,7 +237,7 @@ const handleLogin = async (req, res, next) => {
         access_token,
         user: {
           id: user._id,
-          email: user.user,
+          email: user.email,
           fullName: user.fullName,
           avatar: user.avatar,
         },
@@ -258,7 +259,13 @@ const getAccount = (req, res) => {
     return res.status(200).json({
       success: true,
       data: {
-        user,
+        user: {
+          id: user._id,
+          email: user.email,
+          fullName: user.fullName,
+          avatar: user.avatar,
+          isVerified: user.isVerified,
+        },
       },
       message: "Lấy thông tin tài khoản thành công",
     });
