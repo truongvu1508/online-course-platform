@@ -9,34 +9,34 @@ const userSchema = new mongoose.Schema(
   {
     email: {
       type: String,
-      required: [true, "Email is required"],
+      required: [true, "Email là bắt buộc"],
       unique: true,
       lowercase: true,
       trim: true,
       match: [
         /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-        "Please enter a valid email",
+        "Vui lòng nhập đúng định dạng email",
       ],
     },
 
     password: {
       type: String,
       default: process.env.PASSWORD_DEFAULT,
-      minlength: [6, "Password must be at least 6 characters"],
+      minlength: [6, "Mật khẩu phải từ 6 ký tự"],
       select: false,
     },
 
     fullName: {
       type: String,
-      required: [true, "Full name is required"],
+      required: [true, "Họ tên là bắt buộc"],
       trim: true,
-      maxlength: [50, "Full name cannot exceed 50 characters"],
+      maxlength: [100, "Họ tên không được quá 100 ký tự"],
     },
 
     phone: {
       type: String,
       trim: true,
-      match: [/^[0-9]{10,11}$/, "Please enter a valid phone number"],
+      match: [/^[0-9]{10}$/, "Vui lòng nhập đúng định dạng số điện thoại"],
     },
 
     address: {
@@ -55,7 +55,7 @@ const userSchema = new mongoose.Schema(
 
     role: {
       type: String,
-      required: [true, "Role is required"],
+      required: [true, "Vai trò là bắt buộc"],
       enum: {
         values: ["STUDENT", "ADMIN"],
       },
