@@ -106,14 +106,6 @@
     videoUrl: String, // URL video
     videoDuration: Number, // Thời lượng của video - tính bằng giây
 
-    // Tài liệu đính kèm
-    attachments: [{
-      name: String,
-      url: String,
-      type: String, // "pdf", "zip", "doc", etc.
-      size: Number // bytes
-    }],
-
     // Nội dung bổ sung
     content: String, // HTML content
 
