@@ -51,3 +51,5 @@ export const COURSE_SEARCHABLE_FIELDS = [
 ];
 
 export const CHAPTER_SEARCHABLE_FIELDS = ["title", "description"];
+
+export const LECTURE_SEARCHABLE_FIELDS = ["title", "description", "content"];

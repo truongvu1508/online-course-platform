@@ -168,7 +168,7 @@ const updateChapter = async (req, res) => {
     return res.status(200).json({
       success: true,
       data: updatedChapter,
-      message: "Cập nhật khóa học thành công",
+      message: "Cập nhật chương thành công",
     });
   } catch (error) {
     return res.status(500).json({
