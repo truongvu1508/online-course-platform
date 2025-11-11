@@ -13,7 +13,7 @@ const getAllCoursesService = async (limit, page, queryString) => {
     let result = null;
 
     if (limit && page) {
-      const { filter, skip } = aqp(queryString);
+      const { filter } = aqp(queryString);
 
       delete filter.page;
       let offset = (page - 1) * limit;

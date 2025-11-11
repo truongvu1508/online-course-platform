@@ -49,3 +49,5 @@ export const COURSE_SEARCHABLE_FIELDS = [
   "language",
   "status",
 ];
+
+export const CHAPTER_SEARCHABLE_FIELDS = ["title", "description"];
