@@ -6,6 +6,7 @@ import fileRouters from "./file.route.js";
 import categoryRoutes from "./category.route.js";
 import courseRoutes from "./course.route.js";
 import chapterRoutes from "./chapter.route.js";
+import lectureRoutes from "./lecture.route.js";
 
 const routes = (app) => {
   const router = express.Router();
@@ -21,6 +22,7 @@ const routes = (app) => {
   router.use("/categories", categoryRoutes);
   router.use("/courses", courseRoutes);
   router.use("/chapters", chapterRoutes);
+  router.use("/lectures", lectureRoutes);
 
   app.use("/api", checkValidJWT, router);
 };
