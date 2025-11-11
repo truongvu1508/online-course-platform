@@ -5,7 +5,7 @@ import {
   getChapters,
   getChapterById,
   updateChapter,
-} from "../controllers/Chapter.controller.js";
+} from "../controllers/chapter.controller.js";
 
 const chapterRoutes = express.Router();
 

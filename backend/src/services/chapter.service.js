@@ -74,6 +74,17 @@ const getChapterByIdService = async (chapterId) => {
 const createChapterService = async (chapterData) => {
   const createFields = "_id courseId title description order createdAt ";
   try {
+    if (!chapterData.order) {
+      const maxOrderChapter = await Chapter.findOne({
+        courseId: chapterData.courseId,
+      })
+        .sort({ order: -1 })
+        .select("order")
+        .lean() // tra ve object thay vi document
+        .exec();
+
+      chapterData.order = maxOrderChapter ? maxOrderChapter.order + 1 : 1;
+    }
     const newChapter = await Chapter.create(chapterData);
 
     const populatedChapter = await Chapter.findById(newChapter._id)

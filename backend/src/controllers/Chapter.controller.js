@@ -1,4 +1,4 @@
-import { handleChapterError } from "../../src/utils/error.util.js";
+import { handleChapterError } from "../utils/error.util.js";
 import {
   createChapterService,
   deleteChapterByIdService,
@@ -95,7 +95,7 @@ const createChapter = async (req, res) => {
   try {
     const { courseId, title, description, order } = req.body;
 
-    if (!courseId || !title || !description || !order) {
+    if (!courseId || !title || !description) {
       return res.status(400).json({
         success: false,
         message: "Vui lòng điền đầy đủ thông tin bắt buộc",
@@ -106,8 +106,12 @@ const createChapter = async (req, res) => {
       courseId,
       title,
       description,
-      order,
     };
+
+    // them order khi cung cap
+    if (order !== undefined) {
+      chapterData.order = order;
+    }
 
     const newChapter = await createChapterService(chapterData);
 
