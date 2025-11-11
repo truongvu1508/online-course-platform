@@ -39,3 +39,13 @@ export const USER_SEARCHABLE_FIELDS = [
 ];
 
 export const CATEGORY_SEARCHABLE_FIELDS = ["name", "slug", "description"];
+
+export const COURSE_SEARCHABLE_FIELDS = [
+  "title",
+  "slug",
+  "description",
+  "shortDescription",
+  "level",
+  "language",
+  "status",
+];

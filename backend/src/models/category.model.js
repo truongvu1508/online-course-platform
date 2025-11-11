@@ -31,7 +31,6 @@ const categorySchema = new mongoose.Schema(
   }
 );
 
-categorySchema.index({ slug: 1 });
 categorySchema.index({ order: 1 });
 
 categorySchema.plugin(mongoose_delete, { overrideMethods: "all" });
