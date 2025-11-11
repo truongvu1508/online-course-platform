@@ -37,3 +37,5 @@ export const USER_SEARCHABLE_FIELDS = [
   "address",
   "role",
 ];
+
+export const CATEGORY_SEARCHABLE_FIELDS = ["name", "slug", "description"];
