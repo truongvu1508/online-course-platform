@@ -133,7 +133,6 @@ const courseSchema = new mongoose.Schema(
 );
 
 // index
-courseSchema.index({ slug: 1 });
 courseSchema.index({ categoryId: 1 });
 courseSchema.index({ instructorId: 1 });
 courseSchema.index({ status: 1, isPublished: 1 });
