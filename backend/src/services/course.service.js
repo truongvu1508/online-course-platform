@@ -125,9 +125,40 @@ const deleteCourseByIdService = async (courseId) => {
   }
 };
 
+const getCourseBestSellersService = async () => {
+  try {
+    const bestsellers = await Course.find({
+      status: "published",
+      isPublished: true,
+    })
+      .sort({ totalStudents: -1 })
+      .limit(6)
+      .exec();
+
+    return bestsellers;
+  } catch (error) {
+    throw new Error("Không thể tải các khóa học bán chạy");
+  }
+};
+
+const getCourseNewestService = async () => {
+  try {
+    const newest = await Course.find({ status: "published", isPublished: true })
+      .sort({ createdAt: -1 })
+      .limit(6)
+      .exec();
+
+    return newest;
+  } catch (error) {
+    throw new Error("Không thể tải các khóa học mới nhất");
+  }
+};
+
 export {
   getAllCoursesService,
   getCourseByIdService,
+  getCourseBestSellersService,
+  getCourseNewestService,
   createCourseService,
   updateCourseService,
   deleteCourseByIdService,

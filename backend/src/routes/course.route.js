@@ -4,6 +4,8 @@ import {
   deleteCourse,
   getCourseById,
   getCourses,
+  getCourseBestSellers,
+  getCourseNewest,
   updateCourse,
 } from "../controllers/course.controller.js";
 import { compressImage, upload } from "../middleware/upload.middleware.js";
@@ -11,6 +13,10 @@ import { compressImage, upload } from "../middleware/upload.middleware.js";
 const courseRoutes = express.Router();
 
 // Course routes
+
+courseRoutes.get("/best-sellers", getCourseBestSellers);
+courseRoutes.get("/newest", getCourseNewest);
+
 courseRoutes.get("/", getCourses);
 courseRoutes.get("/:id", getCourseById);
 

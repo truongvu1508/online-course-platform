@@ -8,6 +8,8 @@ import {
   deleteCourseByIdService,
   getAllCoursesService,
   getCourseByIdService,
+  getCourseBestSellersService,
+  getCourseNewestService,
   updateCourseService,
 } from "../services/course.service.js";
 import { extractPublicIdFromUrl } from "../utils/cloudinary.helper.js";
@@ -322,4 +324,42 @@ const deleteCourse = async (req, res) => {
   }
 };
 
-export { getCourses, getCourseById, createCourse, updateCourse, deleteCourse };
+const getCourseBestSellers = async (req, res) => {
+  try {
+    const bestsellers = await getCourseBestSellersService();
+    return res.status(200).json({
+      success: true,
+      data: bestsellers,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const getCourseNewest = async (req, res) => {
+  try {
+    const newest = await getCourseNewestService();
+    return res.status(200).json({
+      success: true,
+      data: newest,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export {
+  getCourses,
+  getCourseById,
+  getCourseBestSellers,
+  getCourseNewest,
+  createCourse,
+  updateCourse,
+  deleteCourse,
+};
