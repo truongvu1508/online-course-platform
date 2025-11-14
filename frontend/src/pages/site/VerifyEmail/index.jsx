@@ -220,7 +220,7 @@ const VerifyEmailPage = () => {
                 digit ? "bg-[#F8FAFC]" : "bg-white"
               }`}
               onFocus={(e) => {
-                e.target.style.borderColor = colors.primary;
+                e.target.style.borderColor = colors.primary.DEFAULT;
                 e.target.style.boxShadow = "0 0 0 3px rgba(30, 64, 175, 0.1)";
               }}
               onBlur={(e) => {

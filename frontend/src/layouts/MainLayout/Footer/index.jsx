@@ -4,6 +4,7 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Button from "@mui/material/Button";
 import { colors } from "../../../utils/colors";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -31,36 +32,36 @@ const Footer = () => {
             </h3>
             <ul className="space-y-2">
               <li>
-                <a
-                  href="#trang-chu"
+                <Link
+                  to={"/"}
                   className="text-gray-600 hover:text-primary hover:font-[600] transition-colors text-sm"
                 >
                   Trang chủ
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#khoa-hoc"
+                <Link
+                  to={"khoa-hoc"}
                   className="text-gray-600 hover:text-primary hover:font-[600] transition-colors text-sm"
                 >
                   Khóa học
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#gioi-thieu"
+                <Link
+                  to={"gioi-thieu"}
                   className="text-gray-600 hover:text-primary hover:font-[600] transition-colors text-sm"
                 >
                   Giới thiệu
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#lien-he"
+                <Link
+                  to={"/lien-he"}
                   className="text-gray-600 hover:text-primary hover:font-[600] transition-colors text-sm"
                 >
                   Liên hệ
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -167,7 +168,7 @@ const Footer = () => {
                 variant="contained"
                 size="large"
                 sx={{
-                  backgroundColor: colors.primary,
+                  backgroundColor: colors.primary.DEFAULT,
                   "&:hover": { backgroundColor: colors.secondary },
                 }}
               >

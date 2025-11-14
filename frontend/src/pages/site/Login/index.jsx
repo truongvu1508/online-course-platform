@@ -77,7 +77,7 @@ const LoginPage = () => {
         <h2
           style={{
             textAlign: "center",
-            color: colors.primary,
+            color: colors.primary.DEFAULT,
             fontSize: "28px",
             fontWeight: "700",
             marginBottom: "10px",
