@@ -58,7 +58,7 @@ const Header = () => {
   ];
 
   return (
-    <header className="bg-white shadow-md sticky top-0 z-50">
+    <header className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link to={"/"} className="flex items-center space-x-2">
@@ -100,7 +100,7 @@ const Header = () => {
                     "& .MuiBadge-badge": {
                       border: "2px solid #fff",
                       padding: "0 4px",
-                      backgroundColor: colors.primary,
+                      backgroundColor: colors.primary.DEFAULT,
                       color: "#fff",
                     },
                   }}
@@ -241,7 +241,7 @@ const Header = () => {
                 <Button
                   variant="contained"
                   sx={{
-                    backgroundColor: colors.primary,
+                    backgroundColor: colors.primary.DEFAULT,
                     "&:hover": {
                       backgroundColor: colors.secondary,
                     },
