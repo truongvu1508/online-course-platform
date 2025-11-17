@@ -36,14 +36,6 @@ configPassportJWT();
 // routes
 routes(app);
 
-// 404 routes
-app.use((req, res, next) => {
-  res.status(404).json({
-    error: "Not Found",
-    message: `Cannot ${req.method} ${req.path}`,
-  });
-});
-
 // connection
 (async () => {
   try {

@@ -1,30 +1,41 @@
-import express from "express";
-import userRoutes from "../routes/user.route.js";
-import authRoutes from "../routes/auth.route.js";
 import { checkValidJWT } from "../middleware/jwt.middleware.js";
-import fileRouters from "./file.route.js";
-import categoryRoutes from "./category.route.js";
-import courseRoutes from "./course.route.js";
-import chapterRoutes from "./chapter.route.js";
-import lectureRoutes from "./lecture.route.js";
+import publicRoutes from "./public/index.route.js";
+import adminRoutes from "./admin/index.route.js";
+import studentRoutes from "./student/index.route.js";
+import sharedRoutes from "./shared/index.route.js";
+import {
+  checkAdminRole,
+  checkStudentRole,
+} from "../middleware/role.middleware.js";
 
 const routes = (app) => {
-  const router = express.Router();
-
-  router.get("/", (req, res) => {
-    res.json({ message: "API is running" });
+  app.get("/api", (req, res) => {
+    res.json({
+      success: true,
+      message: "API is running",
+      timestamp: new Date().toISOString(),
+    });
   });
 
-  // routes
-  router.use("/users", userRoutes);
-  router.use("/auth", authRoutes);
-  router.use("/file", fileRouters);
-  router.use("/categories", categoryRoutes);
-  router.use("/courses", courseRoutes);
-  router.use("/chapters", chapterRoutes);
-  router.use("/lectures", lectureRoutes);
+  // public routes - khong can xac thuc
+  app.use("/api/public", publicRoutes);
 
-  app.use("/api", checkValidJWT, router);
+  // private routes admin - can xac thuc
+  app.use("/api/admin", checkValidJWT, checkAdminRole, adminRoutes);
+
+  // private routes student - can xac thuc
+  app.use("/api/student", checkValidJWT, checkStudentRole, studentRoutes);
+
+  // shared routes for role admin, student
+  app.use("/api", checkValidJWT, sharedRoutes);
+
+  // 404 handler
+  app.use("*", (req, res) => {
+    res.status(404).json({
+      success: false,
+      message: "Route not found",
+    });
+  });
 };
 
 export default routes;
