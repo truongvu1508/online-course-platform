@@ -250,6 +250,7 @@ const handleLogin = async (req, res, next) => {
 const getAccount = (req, res) => {
   try {
     const user = req.user;
+
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -263,6 +264,7 @@ const getAccount = (req, res) => {
           id: user._id,
           email: user.email,
           fullName: user.fullName,
+          role: user.role,
           avatar: user.avatar,
           isVerified: user.isVerified,
         },

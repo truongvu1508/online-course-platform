@@ -31,6 +31,7 @@ const configPassportJWT = () => {
         const userFromDB = await User.findById(jwt_payload.id).select(
           "-password -verificationCode"
         );
+
         if (!userFromDB) {
           return callback(null, false);
         }
@@ -40,7 +41,7 @@ const configPassportJWT = () => {
           email: userFromDB.email,
           fullName: userFromDB.fullName,
           avatar: userFromDB.avatar,
-          roleName: userFromDB.role.name,
+          role: userFromDB.role,
           isVerified: userFromDB.isVerified,
         };
 
