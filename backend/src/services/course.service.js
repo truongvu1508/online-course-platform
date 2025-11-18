@@ -3,6 +3,7 @@ import aqp from "api-query-params";
 import {
   processPartialSearch,
   COURSE_SEARCHABLE_FIELDS,
+  COURSE_EXACT_MATCH_FIELDS,
 } from "../utils/query.helper.js";
 
 const selectedFields =
@@ -17,15 +18,17 @@ const getAllCoursesService = async (limit, page, queryString) => {
 
       delete filter.page;
       let offset = (page - 1) * limit;
+
       const processedFilter = processPartialSearch(
         filter,
-        COURSE_SEARCHABLE_FIELDS
+        COURSE_SEARCHABLE_FIELDS,
+        COURSE_EXACT_MATCH_FIELDS
       );
 
       const [courses, totalCourses] = await Promise.all([
         Course.find(processedFilter)
           .select(selectedFields)
-          .populate("instructorId", "fullName email avatar")
+          .populate("instructorId", "fullName avatar")
           .populate("categoryId", "name slug")
           .limit(limit)
           .skip(offset)
@@ -125,17 +128,103 @@ const deleteCourseByIdService = async (courseId) => {
   }
 };
 
-const getCourseBestSellersService = async () => {
+// public service
+const publicSelectedFields =
+  "_id title slug shortDescription thumbnail previewVideo instructorId categoryId level language price discount finalPrice totalLectures totalDuration totalStudents totalReviews averageRating publishedAt";
+
+const getAllPublicCoursesService = async (limit, page, queryString) => {
   try {
-    const bestsellers = await Course.find({
+    let result = null;
+
+    if (limit && page) {
+      const { filter } = aqp(queryString);
+
+      delete filter.page;
+      let offset = (page - 1) * limit;
+
+      const processedFilter = processPartialSearch(
+        filter,
+        COURSE_SEARCHABLE_FIELDS,
+        COURSE_EXACT_MATCH_FIELDS
+      );
+
+      processedFilter.status = "published";
+      processedFilter.isPublished = true;
+
+      const [courses, totalCourses] = await Promise.all([
+        Course.find(processedFilter)
+          .select(publicSelectedFields)
+          .populate("instructorId", "fullName avatar")
+          .populate("categoryId", "name slug")
+          .limit(limit)
+          .skip(offset)
+          .sort({ publishedAt: -1 })
+          .exec(),
+        Course.countDocuments(processedFilter),
+      ]);
+
+      result = {
+        courses,
+        total: totalCourses,
+        totalPages: Math.ceil(totalCourses / limit),
+        currentPage: Number(page),
+        pageSize: Number(limit),
+      };
+    } else {
+      const courses = await Course.find({
+        status: "published",
+        isPublished: true,
+      })
+        .select(publicSelectedFields)
+        .populate("instructorId", "fullName avatar")
+        .populate("categoryId", "name slug")
+        .sort({ publishedAt: -1 })
+        .exec();
+
+      result = {
+        courses,
+        total: courses.length,
+      };
+    }
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getCourseBySlugService = async (slug) => {
+  try {
+    const course = await Course.findOne({
+      slug: slug,
       status: "published",
       isPublished: true,
     })
-      .sort({ totalStudents: -1 })
-      .limit(6)
+      .select(
+        "_id title slug description shortDescription thumbnail previewVideo instructorId categoryId level language price discount finalPrice requirements whatYouWillLearn targetAudience totalLectures totalDuration totalStudents totalReviews averageRating publishedAt"
+      )
+      .populate("instructorId", "fullName avatar")
+      .populate("categoryId", "name slug description")
       .exec();
 
-    return bestsellers;
+    return course;
+  } catch (error) {
+    throw new Error("Không thể tải thông tin khóa học");
+  }
+};
+
+const getCourseBestSellersService = async () => {
+  try {
+    const bestsellerCourses = await Course.find({
+      status: "published",
+      isPublished: true,
+    })
+      .select(publicSelectedFields)
+      .sort({ totalStudents: -1 })
+      .limit(4)
+      .exec();
+
+    return bestsellerCourses;
   } catch (error) {
     throw new Error("Không thể tải các khóa học bán chạy");
   }
@@ -143,14 +232,36 @@ const getCourseBestSellersService = async () => {
 
 const getCourseNewestService = async () => {
   try {
-    const newest = await Course.find({ status: "published", isPublished: true })
+    const newestCourses = await Course.find({
+      status: "published",
+      isPublished: true,
+    })
+      .select(publicSelectedFields)
       .sort({ createdAt: -1 })
-      .limit(6)
+      .limit(4)
       .exec();
 
-    return newest;
+    return newestCourses;
   } catch (error) {
     throw new Error("Không thể tải các khóa học mới nhất");
+  }
+};
+
+const getCoursesRatingService = async () => {
+  try {
+    const ratingCourses = await Course.find({
+      status: "published",
+      isPublished: true,
+      averageRating: { $gte: 4.5 },
+    })
+      .select(publicSelectedFields)
+      .sort({ averageRating: -1 })
+      .limit(4)
+      .exec();
+
+    return ratingCourses;
+  } catch (error) {
+    throw new Error("Không thể tải các khóa học nổi bật");
   }
 };
 
@@ -162,4 +273,7 @@ export {
   createCourseService,
   updateCourseService,
   deleteCourseByIdService,
+  getAllPublicCoursesService,
+  getCourseBySlugService,
+  getCoursesRatingService,
 };
