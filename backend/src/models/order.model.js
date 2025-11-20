@@ -77,6 +77,15 @@ const orderSchema = new mongoose.Schema(
       },
       default: "pending",
     },
+    cancelledAt: {
+      type: Date,
+      default: null,
+    },
+    cancelledBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
   },
   {
     timestamps: true,
@@ -85,7 +94,6 @@ const orderSchema = new mongoose.Schema(
 );
 
 // Indexes
-orderSchema.index({ orderNumber: 1 });
 orderSchema.index({ userId: 1 });
 orderSchema.index({ status: 1 });
 orderSchema.index({ paymentStatus: 1 });

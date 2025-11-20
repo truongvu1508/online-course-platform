@@ -5,6 +5,7 @@ import categoryRoutes from "./category.route.js";
 import chapterRoutes from "./chapter.route.js";
 import lectureRoutes from "./lecture.route.js";
 import authRoutes from "../shared/auth.route.js";
+import orderRoutes from "./order.route.js";
 
 const router = express.Router();
 
@@ -15,5 +16,6 @@ router.use("/courses", courseRoutes);
 router.use("/categories", categoryRoutes);
 router.use("/chapters", chapterRoutes);
 router.use("/lectures", lectureRoutes);
+router.use("/orders", orderRoutes);
 
 export default router;
