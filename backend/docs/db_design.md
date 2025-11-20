@@ -3,214 +3,194 @@
 ## 1. Collection: users - Người dùng
 
 ```
-  {
-    _id: ObjectId,
-    email: String, // unique, indexed
-    password: String, // hashed
-    fullName: String,
-    avatar: String, // URL
-    phone: String,
-    address: String,
-    dateOfBirth: Date,
-    role: String, // Vai trò: "STUDENT", "ADMIN"
-    isActive: Boolean, // Tài khoản có đang hoạt động không (false = bị khóa)
-    verificationCode: String, // Mã code xác thực gửi qua email
-    lastVerificationCode: Date, // Thời gian gửi mã code xác thực
-    isEmailVerified: Boolean, // Email đã được xác thực chưa
-    createdAt: Date,
-    updatedAt: Date,
-    lastLoginAt: Date // Lần đăng nhập cuối
-  }
+{
+  _id: ObjectId,
+  email: String, // unique, indexed
+  password: String, // hashed
+  fullName: String,
+  avatar: String, // URL
+  phone: String, // Số điện thoại (định dạng 10 ký tự)
+  address: String,
+  dateOfBirth: Date,
+  role: String, // Vai trò: "STUDENT", "ADMIN"
+  isActive: Boolean, // Tài khoản có đang hoạt động không (default: false)
+  isVerified: Boolean, // Email đã được xác thực chưa (default: false)
+  verificationCode: String, // Mã code xác thực gửi qua email
+  lastVerificationSent: Date, // Thời gian gửi mã code xác thực gần nhất
+  lastLoginAt: Date, // Lần đăng nhập cuối (default: null)
+  createdAt: Date,
+  updatedAt: Date
+}
 ```
 
 ## 2. Collection: categories - Danh mục khóa học
 
 ```
-  {
-    _id: ObjectId,
-    name: String,
-    slug: String, // unique, indexed , URL-friendly slug
-    description: String,
-    order: Number, // Thứ tự hiển thị (độ ưu tiên nhất là 1)
-    createdAt: Date,
-    updatedAt: Date
-  }
+{
+  _id: ObjectId,
+  name: String,
+  slug: String, // unique, indexed - URL-friendly slug
+  description: String,
+  order: Number, // Thứ tự hiển thị (độ ưu tiên)
+  createdAt: Date,
+  updatedAt: Date
+}
 ```
 
 ## 3. Collection: courses - Khóa học
 
 ```
-  {
-    _id: ObjectId,
-    title: String,
-    slug: String, // unique, indexed - Dùng cho URL: /courses/react-js-tu-co-ban
-    description: String, // Mô tả chi tiết (HTML)
-    shortDescription: String, // Mô tả ngắn hiển thị ở card
-    thumbnail: String, // URL - Ảnh thumbnail
-    previewVideo: String, // URL - Video giới thiệu
-    instructorId: ObjectId, // reference đến users - ID giảng viên
-    categoryId: ObjectId, // reference đến categories
-    level: String, // "beginner", "intermediate", "advanced" - Cấp độ: beginner/intermediate/advanced
-    language: String, // "vi", "en" - Ngôn ngữ giảng dạy của khóa học
-    discount: Number,
-    price: Number,
+{
+  _id: ObjectId,
+  title: String,
+  slug: String, // unique, indexed - Dùng cho URL: /courses/react-js-tu-co-ban
+  description: String, // Mô tả chi tiết (HTML)
+  shortDescription: String, // Mô tả ngắn hiển thị ở card
+  thumbnail: String, // URL - Ảnh thumbnail (default: null)
+  previewVideo: String, // URL - Video giới thiệu (default: null)
+  instructorId: ObjectId, // reference đến users - ID giảng viên
+  categoryId: ObjectId, // reference đến categories
+  level: String, // "beginner", "intermediate", "advanced"
+  language: String, // "vi", "en"
+  price: Number, // Giá khóa học (min: 0)
+  discount: Number, // Phần trăm giảm giá (min: 0, max: 100, default: 0)
 
-    // Thông tin chi tiết
-    requirements: [String], // Yêu cầu trước khóa học
-    whatYouWillLearn: [String], // Học được gì
-    targetAudience: [String], // Đối tượng học viên
+  // Thông tin chi tiết
+  requirements: [String], // Yêu cầu trước khóa học (default: [])
 
-    // Thống kê
-    totalLectures: Number, // Tổng số bài giảng
-    totalDuration: Number, // Tổng thời lượng
-    totalStudents: Number, // Tổng số học viên đã đăng ký
-    averageRating: Number, // Đánh giá trung bình
-    totalReviews: Number, // Tổng số đánh giá
+  // Thống kê
+  totalLectures: Number, // Tổng số bài giảng (default: 0)
+  totalDuration: Number, // Tổng thời lượng (default: 0)
+  totalStudents: Number, // Tổng số học viên đã đăng ký (default: 0)
+  totalReviews: Number, // Tổng số đánh giá (default: 0)
+  averageRating: Number, // Đánh giá trung bình (min: 0, max: 5, default: 0)
 
-    // Trạng thái
-    status: String, // "draft" - nháp, "published" - đã xuất bản, "archived" - lưu trữ
-    isPublished: Boolean, // Đã xuất bản chưa
-    publishedAt: Date, // Ngày xuất bản
+  // Trạng thái
+  status: String, // "draft", "published", "archived" (default: "draft")
+  isPublished: Boolean, // Đã xuất bản chưa (default: false)
+  publishedAt: Date, // Ngày xuất bản (default: null)
 
-    createdAt: Date,
-    updatedAt: Date
-  }
+  createdAt: Date,
+  updatedAt: Date,
+
+  // Virtual field
+  finalPrice: Number // Giá sau khi áp dụng giảm giá (virtual)
+}
 ```
 
 ## 4. Collection: chapters - Chương học
 
 ```
-  {
-    _id: ObjectId,
-    courseId: ObjectId, // reference đến courses - Thuộc khóa học nào
-    title: String,
-    description: String,
-    order: Number, // thứ tự chapter trong khóa học
-    createdAt: Date,
-    updatedAt: Date
-  }
+{
+  _id: ObjectId,
+  courseId: ObjectId, // reference đến courses
+  title: String,
+  description: String,
+  order: Number, // Thứ tự chapter trong khóa học (min: 1)
+  createdAt: Date,
+  updatedAt: Date
+}
 ```
 
 ## 5. Collection: lectures - Bài giảng
 
 ```
-  {
-    _id: ObjectId,
-    sectionId: ObjectId, // reference đến chapters - Thuộc chương nào
-    courseId: ObjectId, // reference đến courses - Thuộc khóa học nào
-    title: String,
-    description: String,
-    order: Number, // thứ tự bài giảng trong chapter
+{
+  _id: ObjectId,
+  chapterId: ObjectId, // reference đến chapters
+  courseId: ObjectId, // reference đến courses
+  title: String,
+  description: String,
+  order: Number, // Thứ tự bài giảng trong chapter (min: 1)
 
-    // Video
-    videoUrl: String, // URL video
-    videoDuration: Number, // Thời lượng của video - tính bằng giây
+  // Video
+  videoUrl: String, // URL video
+  videoDuration: Number, // Thời lượng của video (tính bằng giây, min: 0)
 
-    // Nội dung bổ sung
-    content: String, // HTML content
+  // Nội dung bổ sung
+  content: String, // HTML content (default: "")
+  isFree: Boolean, // Bài học miễn phí để preview (default: false)
 
-    isFree: Boolean, // Bài học miễn phí để preview
-
-    createdAt: Date,
-    updatedAt: Date
-  }
+  createdAt: Date,
+  updatedAt: Date
+}
 ```
 
-## 6. Collection: enrollments
+## 6. Collection: enrollments - Đăng ký khóa học
 
 ```
-  {
-    _id: ObjectId,
-    userId: ObjectId, // reference đến users
-    courseId: ObjectId, // reference đến courses
+{
+  _id: ObjectId,
+  userId: ObjectId, // reference đến users
+  courseId: ObjectId, // reference đến courses
+  orderId: ObjectId, // reference đến orders
 
-    // Thông tin thanh toán
-    orderId: ObjectId, // reference đến orders
-    enrolledAt: Date, // Thời gian lúc đăng ký
-    expiresAt: Date, // null nếu truy cập vĩnh viễn
+  enrolledAt: Date, // Thời gian đăng ký (default: Date.now)
+  expiresAt: Date, // Thời gian hết hạn (default: null nếu truy cập vĩnh viễn)
 
-    // Tiến độ học
-    progress: Number, // 0-100 - Đã học được bao nhiêu %
-    completedLectures: [ObjectId], // array các lectureId đã hoàn thành
-    lastAccessedLectureId: ObjectId,
-    lastAccessedAt: Date,
+  // Tiến độ học
+  progress: Number, // 0-100 (default: 0)
 
-    totalWatchTime: Number, // Đã xem tổng ... phút
+  // Trạng thái
+  status: String, // "active", "completed", "expired", "suspended" (default: "active")
 
-    // Chứng chỉ - Làm sau
-    certificateIssued: Boolean,
-    certificateIssuedAt: Date,
-    certificateUrl: String,
-
-    // Trạng thái
-    status: String, // "active" - đang học, "completed" - đã hoàn thành, "expired" - hết hạn, "suspended" - cấm
-    createdAt: Date,
-    updatedAt: Date
-  }
+  createdAt: Date,
+  updatedAt: Date
+}
 ```
 
-## 7. Collection: lecture_progress
+## 7. Collection: courseProgress - Tiến độ khóa học
 
 ```
-  {
-    _id: ObjectId,
-    userId: ObjectId, // reference đến users
-    lectureId: ObjectId, // reference đến lectures
-    courseId: ObjectId, // reference đến courses
+{
+  _id: ObjectId,
+  userId: ObjectId, // reference đến users
+  courseId: ObjectId, // reference đến courses
+  completedLectures: [ObjectId], // array các lectureId đã hoàn thành
 
-    // Tiến độ
-    watchedDuration: Number, // giây đã xem
-    totalDuration: Number, // tổng thời lượng
-    progress: Number, // 0-100
-    isCompleted: Boolean,
-    completedAt: Date,
-
-
-    lastWatchedAt: Date,
-    createdAt: Date,
-    updatedAt: Date
-  }
+  createdAt: Date,
+  updatedAt: Date
+}
 ```
 
-## 8. Collection: orders
+## 8. Collection: orders - Đơn hàng
 
 ```
-  {
-    _id: ObjectId,
-    orderNumber: String, // unique, mã đơn hàng
-    userId: ObjectId, // reference đến users
+{
+  _id: ObjectId,
+  orderNumber: String, // unique - mã đơn hàng
+  userId: ObjectId, // reference đến users
 
-    // Chi tiết đơn hàng
-    items: [{
-      courseId: ObjectId,
-      courseName: String,
-      originalPrice: Number, // Giá gốc
-      price: Number // Giá sau khi giảm
-    }],
+  // Chi tiết đơn hàng
+  items: [{
+    courseId: ObjectId,
+    courseName: String,
+    price: Number // Giá của khóa học tại thời điểm đặt hàng (min: 0)
+  }],
 
-    total: Number, // Tổng tiền
+  total: Number, // Tổng tiền (min: 0)
 
-    // Thanh toán
-    paymentMethod: String, // "credit_card", "paypal", "momo", "zalopay", "bank_transfer" - Phương thức thanh toán
-    paymentStatus: String, // "pending", "completed", "failed", "refunded" - Trạng thái thanh toán
-    paymentDetails: {
-      transactionId: String, // Mã giao dịch
-      paymentGateway: String, // Cổng thanh toán
-      paidAt: Date // Thời điểm thanh toán thành công
-    },
+  // Thanh toán
+  paymentMethod: String, // "vnpay", "momo", "bank_transfer"
+  paymentStatus: String, // "pending", "completed", "failed", "refunded" (default: "pending")
+  paymentDetails: {
+    transactionId: String, // Mã giao dịch (default: null)
+    paymentGateway: String, // Cổng thanh toán (default: null)
+    paidAt: Date // Thời điểm thanh toán thành công (default: null)
+  },
 
-    // Hóa đơn
-    invoiceUrl: String,
+  // Trạng thái
+  status: String, // "pending", "completed", "cancelled", "refunded" (default: "pending")
 
-    // Trạng thái
-    status: String, // "pending", "completed", "cancelled", "refunded"
+  cancelledBy: ObjectId, // Người hủy đơn hàng
+  cancelledAt: Date, // Thời gian hủy
 
-    createdAt: Date,
-    updatedAt: Date
-  }
+  createdAt: Date,
+  updatedAt: Date
+}
 ```
 
-## 9. Collection: carts
+## 9. Collection: carts - Giỏ hàng
 
 ```
   {
@@ -224,7 +204,7 @@
   }
 ```
 
-## 10. Review
+## 10. Review: reviews - Đánh giá
 
 ```
   {
@@ -246,3 +226,50 @@
     updatedAt: Date
   }
 ```
+
+## Indexes
+
+### users
+
+- `email` (unique)
+- `role`
+
+### categories
+
+- `order` (ascending)
+- `slug` (unique)
+
+### courses
+
+- `categoryId`
+- `instructorId`
+- `status, isPublished`
+- `averageRating` (descending)
+- `totalStudents` (descending)
+- `slug` (unique)
+
+### chapters
+
+- `courseId, order`
+
+### lectures
+
+- `chapterId, order`
+- `courseId`
+- `isFree`
+
+### enrollments
+
+- `userId, courseId` (unique)
+- `status`
+
+### courseProgress
+
+- `userId, courseId` (unique)
+
+### orders
+
+- `orderNumber` (unique)
+- `userId`
+- `status`
+- `paymentStatus`
