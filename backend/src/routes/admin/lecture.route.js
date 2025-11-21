@@ -5,7 +5,7 @@ import {
   getLectures,
   getLectureById,
   updateLecture,
-} from "../../controllers/lecture.controller.js";
+} from "../../controllers/admin/lecture.controller.js";
 
 const router = express.Router();
 

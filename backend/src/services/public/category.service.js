@@ -1,9 +1,9 @@
-import Category from "../models/category.model.js";
+import Category from "../../models/category.model.js";
 import aqp from "api-query-params";
 import {
   processPartialSearch,
   CATEGORY_SEARCHABLE_FIELDS,
-} from "../utils/query.helper.js";
+} from "../../utils/query.helper.js";
 
 const selectedFields = "_id name slug description order ";
 
@@ -68,53 +68,4 @@ const getCategoryByIdService = async (categoryId) => {
   }
 };
 
-const createCategoryService = async (CategoryData) => {
-  try {
-    const { name, slug, description, order } = CategoryData;
-
-    const newCategory = await Category.create({
-      name,
-      slug,
-      description,
-      order,
-    });
-
-    return newCategory;
-  } catch (error) {
-    console.error("Error creating category:", error);
-    throw error;
-  }
-};
-
-const updateCategoryService = async (categoryId, dataUpdate) => {
-  try {
-    const updated = await Category.findByIdAndUpdate(
-      categoryId,
-      { $set: dataUpdate },
-      { new: true, upsert: false }
-    ).select(selectedFields);
-
-    return updated;
-  } catch (error) {
-    console.error("Error updating category:", error);
-    throw new Error("Lỗi server, không thể cập nhật danh mục");
-  }
-};
-
-const deleteCategoryByIdService = async (categoryId) => {
-  try {
-    const deleted = await Category.deleteById({ _id: categoryId });
-    return deleted;
-  } catch (error) {
-    console.error("Error deleting category:", error);
-    throw new Error("Lỗi server, không thể xoá danh mục");
-  }
-};
-
-export {
-  getAllCategoriesService,
-  getCategoryByIdService,
-  createCategoryService,
-  updateCategoryService,
-  deleteCategoryByIdService,
-};
+export { getAllCategoriesService, getCategoryByIdService };

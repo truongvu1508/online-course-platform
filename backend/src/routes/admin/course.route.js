@@ -5,7 +5,7 @@ import {
   getCourseById,
   getCourses,
   updateCourse,
-} from "../../controllers/course.controller.js";
+} from "../../controllers/admin/course.controller.js";
 import { compressImage, upload } from "../../middleware/upload.middleware.js";
 
 const router = express.Router();

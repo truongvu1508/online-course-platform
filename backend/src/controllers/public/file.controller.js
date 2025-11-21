@@ -2,7 +2,7 @@ import {
   deleteFromCloudinaryService,
   uploadMultipleToCloudinaryService,
   uploadToCloudinaryService,
-} from "../services/file.service.js";
+} from "../../services/public/file.service.js";
 
 const uploadSingleFile = async (req, res) => {
   try {

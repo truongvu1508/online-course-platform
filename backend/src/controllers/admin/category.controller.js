@@ -1,11 +1,11 @@
-import { handleCategoryError } from "../utils/error.util.js";
+import { handleCategoryError } from "../../utils/error.util.js";
 import {
   createCategoryService,
   deleteCategoryByIdService,
   getAllCategoriesService,
   getCategoryByIdService,
   updateCategoryService,
-} from "../services/category.service.js";
+} from "../../services/admin/category.service.js";
 
 // GET/categories
 const getCategories = async (req, res) => {

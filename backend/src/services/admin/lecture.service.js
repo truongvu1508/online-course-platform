@@ -1,9 +1,9 @@
-import Lecture from "../models/lecture.model.js";
+import Lecture from "../../models/lecture.model.js";
 import aqp from "api-query-params";
 import {
   LECTURE_SEARCHABLE_FIELDS,
   processPartialSearch,
-} from "../utils/query.helper.js";
+} from "../../utils/query.helper.js";
 
 const selectedFields =
   "_id chapterId courseId title description order videoUrl videoDuration content isFree";

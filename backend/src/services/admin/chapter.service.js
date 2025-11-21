@@ -1,9 +1,9 @@
-import Chapter from "../models/chapter.model.js";
+import Chapter from "../../models/chapter.model.js";
 import aqp from "api-query-params";
 import {
   CHAPTER_SEARCHABLE_FIELDS,
   processPartialSearch,
-} from "../utils/query.helper.js";
+} from "../../utils/query.helper.js";
 
 const selectedFields =
   "_id courseId title description order createdAt updatedAt";

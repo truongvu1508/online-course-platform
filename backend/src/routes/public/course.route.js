@@ -5,7 +5,7 @@ import {
   getPublicCourseNewest,
   getPublicCourses,
   getPublicCoursesRating,
-} from "../../controllers/course.controller.js";
+} from "../../controllers/public/course.controller.js";
 
 const router = express.Router();
 

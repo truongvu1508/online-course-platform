@@ -1,10 +1,10 @@
-import Course from "../models/course.model.js";
+import Course from "../../models/course.model.js";
 import aqp from "api-query-params";
 import {
   processPartialSearch,
   COURSE_SEARCHABLE_FIELDS,
   COURSE_EXACT_MATCH_FIELDS,
-} from "../utils/query.helper.js";
+} from "../../utils/query.helper.js";
 
 const selectedFields =
   "_id title slug description shortDescription thumbnail previewVideo instructorId categoryId level language price discount finalPrice requirements totalLectures totalDuration totalStudents totalReviews averageRating status isPublished publishedAt createdAt updatedAt";

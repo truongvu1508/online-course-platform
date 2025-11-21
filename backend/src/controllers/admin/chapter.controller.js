@@ -1,11 +1,11 @@
-import { handleChapterError } from "../utils/error.util.js";
+import { handleChapterError } from "../../utils/error.util.js";
 import {
   createChapterService,
   deleteChapterByIdService,
   getAllChaptersService,
   getChapterByIdService,
   updateChapterService,
-} from "../services/chapter.service.js";
+} from "../../services/admin/chapter.service.js";
 
 // GET /chapters
 const getChapters = async (req, res) => {
