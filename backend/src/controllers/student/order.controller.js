@@ -1,10 +1,9 @@
-import Order from "../models/order.model.js";
 import {
   createOrderService,
   getOrdersByStudentService,
   getOrderByIdService,
   cancelOrderService,
-} from "../services/order.service.js";
+} from "../../services/student/order.service.js";
 
 // POST /api/orders
 const createOrder = async (req, res) => {

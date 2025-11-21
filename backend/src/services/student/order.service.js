@@ -1,6 +1,6 @@
-import Order from "../models/order.model.js";
-import Course from "../models/course.model.js";
-import { generateOrderNumber } from "../utils/order.helper.js";
+import Order from "../../models/order.model.js";
+import Course from "../../models/course.model.js";
+import { generateOrderNumber } from "../../utils/order.helper.js";
 
 const selectedFields =
   "_id orderNumber items total paymentMethod paymentStatus status paymentDetails cancelledAt cancelledBy createdAt updatedAt";

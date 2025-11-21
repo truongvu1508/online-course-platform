@@ -4,7 +4,7 @@ import {
   deleteFromCloudinary,
   uploadMultipleFiles,
   uploadSingleFile,
-} from "../../controllers/file.controller.js";
+} from "../../controllers/public/file.controller.js";
 
 const router = express.Router();
 

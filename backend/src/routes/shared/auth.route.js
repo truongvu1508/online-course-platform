@@ -1,9 +1,9 @@
 import express from "express";
-import { getAccount } from "../../controllers/auth.controller.js";
+import { getAccount } from "../../controllers/shared/auth.controller.js";
 
 const router = express.Router();
 
 // protected auth routes
-router.get("/account", getAccount); // get current user info
+router.get("/account", getAccount);
 
 export default router;

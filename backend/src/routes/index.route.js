@@ -7,15 +7,10 @@ import {
   checkAdminRole,
   checkStudentRole,
 } from "../middleware/role.middleware.js";
+import { healthCheck } from "../controllers/index.controller.js";
 
 const routes = (app) => {
-  app.get("/api", (req, res) => {
-    res.json({
-      success: true,
-      message: "API is running",
-      timestamp: new Date().toISOString(),
-    });
-  });
+  app.get("/api", healthCheck);
 
   // public routes - khong can xac thuc
   app.use("/api/public", publicRoutes);

@@ -1,16 +1,16 @@
-import { handleUserError } from "../../src/utils/error.util.js";
+import { handleUserError } from "../../utils/error.util.js";
 import {
   deleteFromCloudinaryService,
   uploadToCloudinaryService,
-} from "../services/file.service.js";
+} from "../../services/public/file.service.js";
 import {
   createUserService,
   deleteUserByIdService,
   getAllUsersService,
   getUserByIdService,
   updateUserService,
-} from "../services/user.service.js";
-import { extractPublicIdFromUrl } from "../utils/cloudinary.helper.js";
+} from "../../services/admin/user.service.js";
+import { extractPublicIdFromUrl } from "../../utils/cloudinary.helper.js";
 
 // GET /users
 const getUsers = async (req, res) => {

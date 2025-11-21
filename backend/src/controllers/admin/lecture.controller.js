@@ -1,11 +1,11 @@
-import { handleLectureError } from "../utils/error.util.js";
+import { handleLectureError } from "../../utils/error.util.js";
 import {
   createLectureService,
   deleteLectureByIdService,
   getAllLecturesService,
   getLectureByIdService,
   updateLectureService,
-} from "../services/lecture.service.js";
+} from "../../services/admin/lecture.service.js";
 
 // GET/lectures
 const getLectures = async (req, res) => {

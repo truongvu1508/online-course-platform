@@ -1,7 +1,7 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
-import { handleLoginService } from "../services/auth.service.js";
+import { handleLoginService } from "../services/public/auth.service.js";
 import User from "../models/users.model.js";
 
 const configPassportLocal = () => {

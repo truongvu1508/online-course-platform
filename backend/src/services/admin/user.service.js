@@ -1,9 +1,9 @@
-import User from "../models/users.model.js";
+import User from "../../models/users.model.js";
 import aqp from "api-query-params";
 import {
   processPartialSearch,
   USER_SEARCHABLE_FIELDS,
-} from "../utils/query.helper.js";
+} from "../../utils/query.helper.js";
 
 const selectedFields = "_id email fullName phone avatar role lastLoginAt";
 

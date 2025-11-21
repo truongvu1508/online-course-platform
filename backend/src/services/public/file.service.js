@@ -1,4 +1,4 @@
-import cloudinary from "../config/cloudinary.config.js";
+import cloudinary from "../../config/cloudinary.config.js";
 import sharp from "sharp";
 
 // Upload single file to Cloudinary

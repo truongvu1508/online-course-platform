@@ -1,6 +1,6 @@
 import passport from "passport";
-import User from "../models/users.model.js";
-import { comparePasswordService } from "../middleware/user.middleware.js";
+import User from "../../models/users.model.js";
+import { comparePasswordService } from "../../middleware/user.middleware.js";
 
 const handleRegisterService = async (dataRegister) => {
   const { email, fullName, password, verificationCode } = dataRegister;

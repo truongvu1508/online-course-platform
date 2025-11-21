@@ -5,7 +5,7 @@ import {
   getUserById,
   getUsers,
   updateUser,
-} from "../../controllers/user.controller.js";
+} from "../../controllers/admin/user.controller.js";
 import { compressImage, upload } from "../../middleware/upload.middleware.js";
 
 const router = express.Router();

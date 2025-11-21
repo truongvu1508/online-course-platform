@@ -2,10 +2,10 @@ import express from "express";
 import {
   createChapter,
   deleteChapter,
-  getChapters,
   getChapterById,
+  getChapters,
   updateChapter,
-} from "../../controllers/chapter.controller.js";
+} from "../../controllers/admin/chapter.controller.js";
 
 const router = express.Router();
 

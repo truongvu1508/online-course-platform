@@ -1,4 +1,4 @@
-import { transporter } from "../config/email.config.js";
+import { transporter } from "../../config/email.config.js";
 
 export const sendVerificationCode = async (email, verificationCode) => {
   try {

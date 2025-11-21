@@ -4,7 +4,7 @@ import {
   handleRegister,
   handleResendVerificationCode,
   handleVerifyEmail,
-} from "../../controllers/auth.controller.js";
+} from "../../controllers/public/auth.controller.js";
 
 const router = express.Router();
 
