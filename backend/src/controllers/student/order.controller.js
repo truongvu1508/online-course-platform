@@ -4,6 +4,7 @@ import {
   getOrderByIdService,
   cancelOrderService,
 } from "../../services/student/order.service.js";
+import { initiateVNPayPayment } from "../../services/student/payment.service.js";
 
 // POST /api/orders
 const createOrder = async (req, res) => {
@@ -39,10 +40,18 @@ const createOrder = async (req, res) => {
 
     const newOrder = await createOrderService(userId, items, paymentMethod);
 
+    let paymentData;
+    if (paymentMethod === "vnpay") {
+      paymentData = await initiateVNPayPayment(newOrder);
+    }
+
     return res.status(201).json({
       success: true,
       message: "Tạo đơn hàng thành công",
-      data: newOrder,
+      data: {
+        order: newOrder,
+        paymentInfo: paymentData,
+      },
     });
   } catch (error) {
     console.error("Error creating order:", error);

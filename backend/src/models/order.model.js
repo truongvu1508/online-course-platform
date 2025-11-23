@@ -49,7 +49,7 @@ const orderSchema = new mongoose.Schema(
     paymentStatus: {
       type: String,
       enum: {
-        values: ["pending", "completed", "failed", "refunded"],
+        values: ["pending", "completed", "cancelled", "failed", "refunded"],
         message: "Trạng thái thanh toán không hợp lệ",
       },
       default: "pending",
@@ -67,15 +67,39 @@ const orderSchema = new mongoose.Schema(
         type: Date,
         default: null,
       },
+      bankCode: {
+        type: String,
+        default: null,
+      },
+      bankTranNo: {
+        type: String,
+        default: null,
+      },
+      cardType: {
+        type: String,
+        default: null,
+      },
+      payDate: {
+        type: String,
+        default: null,
+      },
+      responseCode: {
+        type: String,
+        default: null,
+      },
+      transactionStatus: {
+        type: String,
+        default: null,
+      },
     },
     // trang thai don hang
     status: {
       type: String,
       enum: {
-        values: ["pending", "completed", "cancelled", "refunded"],
+        values: ["unpaid", "paid", "cancelled", "refunded"],
         message: "Invalid order status",
       },
-      default: "pending",
+      default: "unpaid",
     },
     cancelledAt: {
       type: Date,

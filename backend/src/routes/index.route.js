@@ -13,7 +13,7 @@ const routes = (app) => {
   app.get("/api", healthCheck);
 
   // public routes - khong can xac thuc
-  app.use("/api/public", publicRoutes);
+  app.use("/api", publicRoutes);
 
   // private routes admin - can xac thuc
   app.use("/api/admin", checkValidJWT, checkAdminRole, adminRoutes);
@@ -22,7 +22,7 @@ const routes = (app) => {
   app.use("/api/student", checkValidJWT, checkStudentRole, studentRoutes);
 
   // shared routes for role admin, student
-  app.use("/api", checkValidJWT, sharedRoutes);
+  app.use("/api/shared", checkValidJWT, sharedRoutes);
 
   // 404 handler
   app.use("*", (req, res) => {

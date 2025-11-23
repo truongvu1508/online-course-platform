@@ -45,7 +45,7 @@ const createOrderService = async (userId, items, paymentMethod) => {
       total: totalAmount,
       paymentMethod,
       paymentStatus: "pending",
-      status: "pending",
+      status: "unpaid",
     });
 
     const populatedOrder = await Order.findById(newOrder._id)
