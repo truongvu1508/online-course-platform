@@ -174,13 +174,19 @@
   paymentMethod: String, // "vnpay", "momo", "bank_transfer"
   paymentStatus: String, // "pending", "completed", "failed", "refunded" (default: "pending")
   paymentDetails: {
-    transactionId: String, // Mã giao dịch (default: null)
-    paymentGateway: String, // Cổng thanh toán (default: null)
-    paidAt: Date // Thời điểm thanh toán thành công (default: null)
+    transactionId: String, // Mã giao dịch từ cổng thanh toán (default: null)
+    paymentGateway: String, // Tên cổng thanh toán (VNPay, MoMo, etc.) (default: null)
+    paidAt: Date, // Thời điểm thanh toán thành công (default: null)
+    bankCode: String, // Mã ngân hàng (VNPay) (default: null)
+    bankTranNo: String, // Mã giao dịch của ngân hàng (default: null)
+    cardType: String, // Loại thẻ (ATM, QRCODE, etc.) (default: null)
+    payDate: String, // Ngày thanh toán từ VNPay (format: yyyyMMddHHmmss) (default: null)
+    responseCode: String, // Mã phản hồi từ cổng thanh toán (00 = thành công) (default: null)
+    transactionStatus: String, // Trạng thái giao dịch từ cổng thanh toán (default: null)
   },
 
   // Trạng thái
-  status: String, // "pending", "completed", "cancelled", "refunded" (default: "pending")
+  status: String, // "unpaid", "paid", "cancelled", "refunded" (default: "unpaid")
 
   cancelledBy: ObjectId, // Người hủy đơn hàng
   cancelledAt: Date, // Thời gian hủy

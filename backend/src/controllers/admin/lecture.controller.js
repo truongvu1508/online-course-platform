@@ -105,15 +105,7 @@ const createLecture = async (req, res) => {
       isFree,
     } = req.body;
 
-    if (
-      !chapterId ||
-      !courseId ||
-      !title ||
-      !description ||
-      !videoUrl ||
-      !videoDuration ||
-      !content
-    ) {
+    if (!chapterId || !courseId || !title || !videoUrl || !videoDuration) {
       return res.status(400).json({
         success: false,
         message: "Vui lòng điền đầy đủ thông tin bắt buộc",

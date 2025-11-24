@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+import Course from "../../models/course.model.js";
 import Enroll from "../../models/enrollment.model.js";
 import Order from "../../models/order.model.js";
 
@@ -5,51 +7,74 @@ const enrollmentFields =
   "_id userId courseId orderId enrolledAt expiresAt progress status";
 
 const createEnrollmentService = async (orderId) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
   try {
     const order = await Order.findById(orderId).exec();
     if (!order) {
       throw new Error("Không tìm thấy đơn hàng");
     }
 
-    if (order.status !== "completed" || order.paymentStatus !== "completed") {
+    if (order.status !== "paid" || order.paymentStatus !== "completed") {
       throw new Error(
         `Không thể tạo enroll. Trạng thái đơn hàng hiện tại: ${order.status}`
       );
     }
 
     const enrollments = [];
+    const courseIdsToUpdate = [];
 
     for (let item of order.items) {
       const exists = await Enroll.findOne({
         userId: order.userId,
         courseId: item.courseId,
-      }).exec();
+      }).session(session);
 
       if (!exists) {
-        const newEnroll = await Enroll.create({
-          userId: order.userId,
-          courseId: item.courseId,
-          orderId: order._id,
-          enrolledAt: new Date(),
-          expiresAt: null,
-          progress: 0,
-          status: "active",
-        });
+        const newEnroll = await Enroll.create(
+          [
+            {
+              userId: order.userId,
+              courseId: item.courseId,
+              orderId: order._id,
+              enrolledAt: new Date(),
+              expiresAt: null,
+              progress: 0,
+              status: "active",
+            },
+          ],
+          { session }
+        );
 
-        const enrollment = await Enroll.findById(newEnroll._id)
+        courseIdsToUpdate.push(item.courseId);
+
+        const enrollment = await Enroll.findById(newEnroll[0]._id)
+          .session(session)
           .select(enrollmentFields)
           .populate("userId", "fullName email")
-          .populate("courseId", "title description slug thumbnail")
-          .exec();
+          .populate("courseId", "title description slug thumbnail");
 
         enrollments.push(enrollment);
       }
     }
 
+    if (courseIdsToUpdate.length > 0) {
+      await Course.updateMany(
+        { _id: { $in: courseIdsToUpdate } },
+        { $inc: { totalStudents: 1 } },
+        { session }
+      );
+    }
+
+    await session.commitTransaction();
     return enrollments;
   } catch (error) {
+    await session.abortTransaction();
     console.error("Error creating enrollments:", error);
     throw error;
+  } finally {
+    session.endSession();
   }
 };
 

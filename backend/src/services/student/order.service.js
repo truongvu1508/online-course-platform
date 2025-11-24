@@ -1,6 +1,7 @@
 import Order from "../../models/order.model.js";
 import Course from "../../models/course.model.js";
 import { generateOrderNumber } from "../../utils/order.helper.js";
+import Enrollment from "../../models/enrollment.model.js";
 
 const selectedFields =
   "_id orderNumber items total paymentMethod paymentStatus status paymentDetails cancelledAt cancelledBy createdAt updatedAt";
@@ -9,6 +10,31 @@ const courseFields = "title slug thumbnail price discount";
 
 const createOrderService = async (userId, items, paymentMethod) => {
   try {
+    const courseIds = items.map((item) => item.courseId);
+    const uniqueCourseIds = [...new Set(courseIds)];
+
+    if (courseIds.length !== uniqueCourseIds.length) {
+      throw new Error("Không thể thêm cùng một khóa học nhiều lần");
+    }
+
+    const existingEnrollments = await Enrollment.find({
+      userId,
+      courseId: { $in: uniqueCourseIds },
+    }).select("courseId");
+
+    if (existingEnrollments.length > 0) {
+      const enrolledCourseIds = existingEnrollments.map((e) =>
+        e.courseId.toString()
+      );
+      const duplicates = uniqueCourseIds.filter((id) =>
+        enrolledCourseIds.includes(id)
+      );
+
+      throw new Error(
+        `Bạn đã sở hữu các khóa học này: ${duplicates.join(", ")}`
+      );
+    }
+
     let totalAmount = 0;
     const orderItems = [];
 
@@ -167,10 +193,10 @@ const cancelOrderService = async (orderId, userId) => {
       throw new Error("Bạn không có quyền hủy đơn hàng này");
     }
 
-    // chi duoc huy khi don hang o trang thai pending
-    if (order.status !== "pending") {
+    // chi duoc huy khi don hang o trang thai unpaid
+    if (order.status !== "unpaid") {
       throw new Error(
-        `Chỉ có thể hủy đơn hàng có trạng thái 'pending'. Trạng thái hiện tại: ${order.status}`
+        `Chỉ có thể hủy đơn hàng có trạng thái 'unpaid'. Trạng thái hiện tại: ${order.status}`
       );
     }
 
@@ -179,7 +205,7 @@ const cancelOrderService = async (orderId, userId) => {
       orderId,
       {
         status: "cancelled",
-        paymentStatus: "refunded",
+        paymentStatus: "cancelled",
         cancelledAt: new Date(),
         cancelledBy: userId,
       },
