@@ -1,5 +1,6 @@
 import { VNPay, ignoreLogger, ProductCode, VnpLocale, dateFormat } from "vnpay";
 import Order from "../../models/order.model.js";
+import { createEnrollmentService } from "./enrollment.service.js";
 
 const initiateVNPayPayment = async (order) => {
   try {
@@ -16,12 +17,12 @@ const initiateVNPayPayment = async (order) => {
     tomorrow.setDate(tomorrow.getDate() + 1);
 
     const paymentUrl = vnpay.buildPaymentUrl({
-      vnp_Amount: order.total * 100,
+      vnp_Amount: order.total,
       vnp_IpAddr: "127.0.0.1",
       vnp_TxnRef: order.orderNumber,
       vnp_OrderInfo: `Thanh toan don hang ${order.orderNumber}`,
       vnp_OrderType: ProductCode.Other,
-      vnp_ReturnUrl: `${process.env.BASE_URL}/api/payment/vnpay-callback`,
+      vnp_ReturnUrl: "http://localhost:8080/api/payment/vnpay-callback",
       vnp_Locale: VnpLocale.VN,
       vnp_CreateDate: dateFormat(new Date()),
       vnp_ExpireDate: dateFormat(tomorrow),
@@ -67,6 +68,7 @@ const processVNPayCallback = async (callbackData) => {
     } = callbackData;
 
     const order = await Order.findOne({ orderNumber: vnp_TxnRef });
+
     if (!order) {
       throw new Error("Không tìm thấy đơn hàng");
     }
@@ -89,6 +91,17 @@ const processVNPayCallback = async (callbackData) => {
         responseCode: vnp_ResponseCode,
         transactionStatus: vnp_TransactionStatus,
       };
+
+      await order.save();
+
+      try {
+        const enrollments = await createEnrollmentService(order._id);
+        console.log(
+          `Đã tạo ${enrollments.length} enrollments cho order ${order.orderNumber}`
+        );
+      } catch (enrollError) {
+        console.error("Lỗi khi tạo enrollment:", enrollError);
+      }
     } else {
       order.paymentStatus = "failed";
       order.status = "unpaid";
@@ -98,9 +111,10 @@ const processVNPayCallback = async (callbackData) => {
         paymentGateway: "vnpay",
         failedAt: new Date(),
       };
+
+      await order.save();
     }
 
-    await order.save();
     return order;
   } catch (error) {
     console.error("Error processing VNPay callback:", error);
