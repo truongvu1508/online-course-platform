@@ -1,6 +1,8 @@
 import { VNPay, ignoreLogger, ProductCode, VnpLocale, dateFormat } from "vnpay";
 import Order from "../../models/order.model.js";
 import { createEnrollmentService } from "./enrollment.service.js";
+import Cart from "../../models/cart.model.js";
+import { clearCartService } from "./cart.service.js";
 
 const initiateVNPayPayment = async (order) => {
   try {
@@ -101,6 +103,30 @@ const processVNPayCallback = async (callbackData) => {
         );
       } catch (enrollError) {
         console.error("Lỗi khi tạo enrollment:", enrollError);
+      }
+
+      try {
+        if (order.fromCart) {
+          // mua tu gio hang -> xoa toan bo gio hang
+          await clearCartService(order.userId);
+          console.log(`Đã xóa giỏ hàng của user ${order.userId}`);
+        } else {
+          // mua ngay -> xoa khoa hoc vua mua khoi gio hang
+          const purchasedCourseIds = order.items.map((item) => item.courseId);
+          await Cart.updateOne(
+            { userId: order.userId },
+            {
+              $pull: {
+                items: { courseId: { $in: purchasedCourseIds } },
+              },
+            }
+          );
+          console.log(
+            `Đã xóa ${purchasedCourseIds.length} khóa học khỏi giỏ hàng`
+          );
+        }
+      } catch (cartError) {
+        console.error("Lỗi khi xử lý giỏ hàng:", cartError);
       }
     } else {
       order.paymentStatus = "failed";

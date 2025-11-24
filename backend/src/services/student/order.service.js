@@ -2,21 +2,50 @@ import Order from "../../models/order.model.js";
 import Course from "../../models/course.model.js";
 import { generateOrderNumber } from "../../utils/order.helper.js";
 import Enrollment from "../../models/enrollment.model.js";
+import Cart from "../../models/cart.model.js";
 
 const selectedFields =
   "_id orderNumber items total paymentMethod paymentStatus status paymentDetails cancelledAt cancelledBy createdAt updatedAt";
 
 const courseFields = "title slug thumbnail price discount";
 
-const createOrderService = async (userId, items, paymentMethod) => {
+const createOrderService = async (
+  userId,
+  items,
+  paymentMethod,
+  fromCart = false
+) => {
   try {
-    const courseIds = items.map((item) => item.courseId);
+    let courseIds = [];
+
+    // mua tu gio hang
+    if (fromCart) {
+      const cart = await Cart.findOne({ userId }).populate("items.courseId");
+
+      if (!cart || cart.items.length === 0) {
+        throw new Error("Giỏ hàng trống, không thể tạo đơn hàng");
+      }
+
+      courseIds = cart.items.map((item) => item.courseId._id.toString());
+
+      items = cart.items.map((item) => ({
+        courseId: item.courseId._id,
+      }));
+    } else {
+      // mua ngay
+      if (!items || !Array.isArray(items) || items.length === 0) {
+        throw new Error("Danh sách khóa học không hợp lệ");
+      }
+      courseIds = items.map((item) => item.courseId);
+    }
+
     const uniqueCourseIds = [...new Set(courseIds)];
 
     if (courseIds.length !== uniqueCourseIds.length) {
       throw new Error("Không thể thêm cùng một khóa học nhiều lần");
     }
 
+    // kiem tra da dang ky khoa hoc chua
     const existingEnrollments = await Enrollment.find({
       userId,
       courseId: { $in: uniqueCourseIds },
@@ -72,6 +101,7 @@ const createOrderService = async (userId, items, paymentMethod) => {
       paymentMethod,
       paymentStatus: "pending",
       status: "unpaid",
+      fromCart,
     });
 
     const populatedOrder = await Order.findById(newOrder._id)

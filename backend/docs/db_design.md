@@ -206,6 +206,7 @@
       courseId: ObjectId,
       addedAt: Date
     }],
+    totalPrice: Number,
     updatedAt: Date
   }
 ```
