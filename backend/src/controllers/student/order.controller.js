@@ -10,14 +10,7 @@ import { initiateVNPayPayment } from "../../services/student/payment.service.js"
 const createOrder = async (req, res) => {
   try {
     const userId = req.user._id;
-    const { items, paymentMethod } = req.body;
-
-    if (!items || !Array.isArray(items) || items.length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: "Danh sách khóa học không hợp lệ",
-      });
-    }
+    const { items, paymentMethod, fromCart = false } = req.body;
 
     if (
       !paymentMethod ||
@@ -29,16 +22,30 @@ const createOrder = async (req, res) => {
       });
     }
 
-    for (let item of items) {
-      if (!item.courseId || !item.courseId.match(/^[0-9a-fA-F]{24}$/)) {
+    if (!fromCart) {
+      if (!items || !Array.isArray(items) || items.length === 0) {
         return res.status(400).json({
           success: false,
-          message: "ID khóa học không hợp lệ",
+          message: "Danh sách khóa học không hợp lệ",
         });
+      }
+
+      for (let item of items) {
+        if (!item.courseId || !item.courseId.match(/^[0-9a-fA-F]{24}$/)) {
+          return res.status(400).json({
+            success: false,
+            message: "ID khóa học không hợp lệ",
+          });
+        }
       }
     }
 
-    const newOrder = await createOrderService(userId, items, paymentMethod);
+    const newOrder = await createOrderService(
+      userId,
+      items,
+      paymentMethod,
+      fromCart
+    );
 
     let paymentData;
     if (paymentMethod === "vnpay") {

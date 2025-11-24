@@ -110,6 +110,11 @@ const orderSchema = new mongoose.Schema(
       ref: "User",
       default: null,
     },
+    fromCart: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
   },
   {
     timestamps: true,
