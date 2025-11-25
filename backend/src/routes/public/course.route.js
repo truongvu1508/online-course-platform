@@ -5,6 +5,7 @@ import {
   getPublicCourseNewest,
   getPublicCourses,
   getPublicCoursesRating,
+  getPublicCourseReviews,
 } from "../../controllers/public/course.controller.js";
 
 const router = express.Router();
@@ -16,5 +17,6 @@ router.get("/newest", getPublicCourseNewest);
 router.get("/rating", getPublicCoursesRating);
 
 router.get("/:slug", getPublicCourseBySlug);
+router.get("/reviews/:courseId", getPublicCourseReviews);
 
 export default router;

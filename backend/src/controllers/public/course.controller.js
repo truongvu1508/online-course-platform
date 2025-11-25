@@ -4,6 +4,7 @@ import {
   getCoursesRatingService,
   getCourseBySlugService,
   getAllPublicCoursesService,
+  getCourseReviewsService,
 } from "../../services/public/course.service.js";
 
 // GET /api/public/courses
@@ -143,10 +144,58 @@ const getPublicCoursesRating = async (req, res) => {
   }
 };
 
+const getPublicCourseReviews = async (req, res) => {
+  try {
+    let { limit, page } = req.query;
+    const { courseId } = req.params;
+
+    if (limit !== undefined) {
+      limit = Number(limit);
+      if (isNaN(limit) || limit <= 0 || limit > 100) {
+        return res.status(400).json({
+          success: false,
+          message: "Limit phải là số dương và không vượt quá 100",
+        });
+      }
+    }
+
+    if (page !== undefined) {
+      page = Number(page);
+      if (isNaN(page) || page <= 0) {
+        return res.status(400).json({
+          success: false,
+          message: "Page phải là số dương",
+        });
+      }
+    }
+
+    if (!courseId) {
+      return res.status(400).json({
+        success: false,
+        message: "Course ID không hợp lệ",
+      });
+    }
+
+    const reviews = await getCourseReviewsService(courseId, limit, page);
+
+    return res.status(200).json({
+      success: true,
+      message: "Lấy đánh giá khóa học thành công",
+      data: reviews,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export {
   getPublicCourses,
   getPublicCourseBySlug,
   getPublicCourseBestSellers,
   getPublicCourseNewest,
   getPublicCoursesRating,
+  getPublicCourseReviews,
 };
