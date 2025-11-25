@@ -7,6 +7,8 @@ import {
 } from "../../utils/query.helper.js";
 import Lecture from "../../models/lecture.model.js";
 import Chapter from "../../models/chapter.model.js";
+import Review from "../../models/review.model.js";
+import Enrollment from "../../models/enrollment.model.js";
 
 // public service
 const publicSelectedFields =
@@ -190,10 +192,74 @@ const getCoursesRatingService = async () => {
   }
 };
 
+const getCourseReviewsService = async (courseId, limit, page) => {
+  try {
+    let result = null;
+
+    const enrollments = await Enrollment.find({ courseId: courseId }).select(
+      "_id"
+    );
+    const enrollmentIds = enrollments.map((enrollment) => enrollment._id);
+
+    if (enrollmentIds.length === 0) {
+      return {
+        reviews: [],
+        total: 0,
+        totalPages: Math.ceil(0 / (limit || 10)),
+        currentPage: Number(page) || 1,
+        pageSize: Number(limit) || 10,
+      };
+    }
+
+    if (limit && page) {
+      let offset = (page - 1) * limit;
+
+      const [reviews, totalReviews] = await Promise.all([
+        Review.find({ enrollmentId: { $in: enrollmentIds } })
+          .select("_id userId rating comment createdAt")
+          .populate("userId", "fullName avatar")
+          .limit(limit)
+          .skip(offset)
+          .sort({ createdAt: -1 })
+          .exec(),
+
+        Review.countDocuments({ enrollmentId: { $in: enrollmentIds } }),
+      ]);
+
+      result = {
+        reviews,
+        total: totalReviews,
+        totalPages: Math.ceil(totalReviews / limit),
+        currentPage: Number(page),
+        pageSize: Number(limit),
+      };
+    } else {
+      const reviews = await Review.find({
+        enrollmentId: { $in: enrollmentIds },
+      })
+        .select("_id userId rating comment createdAt")
+        .populate("userId", "fullName avatar")
+        .sort({ createdAt: -1 })
+        .exec();
+
+      result = {
+        reviews,
+        total: reviews.length,
+      };
+    }
+
+    return result;
+  } catch (error) {
+    console.error("Error in getCourseReviewsService:", error);
+    throw new Error("Không thể tải đánh giá khóa học");
+  }
+};
+
 export {
   getCourseBestSellersService,
   getCourseNewestService,
   getAllPublicCoursesService,
   getCourseBySlugService,
   getCoursesRatingService,
+  getCourseReviewsService,
 };
