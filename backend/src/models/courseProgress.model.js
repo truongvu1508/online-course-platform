@@ -3,15 +3,10 @@ import mongoose_delete from "mongoose-delete";
 
 const courseProgressSchema = new mongoose.Schema(
   {
-    userId: {
+    enrollmentId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: [true, "ID học viên là bắt buộc"],
-    },
-    courseId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Course",
-      required: [true, "ID khóa học là bắt buộc"],
+      ref: "Enrollment",
+      required: true,
     },
     completedLectures: [
       {
@@ -25,9 +20,7 @@ const courseProgressSchema = new mongoose.Schema(
     versionKey: false,
   }
 );
-
-// Compound unique index
-courseProgressSchema.index({ userId: 1, courseId: 1 }, { unique: true });
+courseProgressSchema.index({ enrollmentId: 1 }, { unique: true });
 
 courseProgressSchema.plugin(mongoose_delete, { overrideMethods: "all" });
 
