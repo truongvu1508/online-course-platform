@@ -190,7 +190,7 @@ const HomePage = () => {
       <CourseSections />
       <section className="py-20 bg-secondary">
         <div className="container">
-          <h3 className="text-3xl font-bold text-center mb-8 text-gray-400">
+          <h3 className="text-4xl font-bold text-center mb-16 text-white">
             Học viên nói gì về{" "}
             <span className="text-primary-300">CodeLearn</span>
           </h3>

@@ -101,7 +101,7 @@ const CategoryMarquee = () => {
   return (
     <div className="w-full bg-white py-8">
       <div className="container mx-auto px-4">
-        <h3 className="text-3xl font-bold text-center mb-6 text-gray-600">
+        <h3 className="text-4xl font-bold text-center mb-16 text-gray-600">
           Danh mục khóa học tại <span className="text-primary">CodeLearn</span>
         </h3>
 

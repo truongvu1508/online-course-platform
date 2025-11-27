@@ -20,7 +20,7 @@ const CourseSections = () => {
   return (
     <section className="py-10 bg-gray-50">
       <div className="container">
-        <h1 className="text-center text-3xl font-bold text-primary">
+        <h1 className="text-center text-4xl font-bold text-primary">
           Các Khóa Học
         </h1>
         <div className="flex justify-center w-full mt-3">
