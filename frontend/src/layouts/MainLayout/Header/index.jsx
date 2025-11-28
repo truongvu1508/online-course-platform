@@ -74,10 +74,8 @@ const Header = () => {
                 key={item.path}
                 to={item.path}
                 className={({ isActive }) =>
-                  `text-gray-600 hover:text-primary text-base font-bold transition-colors pb-1 ${
-                    isActive
-                      ? "text-primary font-[800] border-b-2 border-primary"
-                      : ""
+                  `link-menu text-gray-600 hover:text-primary text-base font-bold transition-colors ${
+                    isActive ? "active" : ""
                   }`
                 }
               >

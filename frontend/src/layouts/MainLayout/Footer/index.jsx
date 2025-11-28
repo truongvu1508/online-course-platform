@@ -4,9 +4,17 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Button from "@mui/material/Button";
 import { colors } from "../../../utils/colors";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import "./Footer.scss";
 
 const Footer = () => {
+  // Khai báo các liên kết nhanh
+  const quickLinks = [
+    { label: "Trang chủ", path: "/" },
+    { label: "Khóa học", path: "/khoa-hoc" },
+    { label: "Giới thiệu", path: "/gioi-thieu" },
+    { label: "Liên hệ", path: "/lien-he" },
+  ];
   return (
     <footer className="bg-white text-gray-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -25,44 +33,21 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Quick Links */}
           <div>
             <h3 className="font-bold text-primary text-lg mb-4">
               Liên kết nhanh
             </h3>
             <ul className="space-y-2">
-              <li>
-                <Link
-                  to={"/"}
-                  className="text-gray-600 hover:text-primary hover:font-[600] transition-colors text-sm"
-                >
-                  Trang chủ
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to={"khoa-hoc"}
-                  className="text-gray-600 hover:text-primary hover:font-[600] transition-colors text-sm"
-                >
-                  Khóa học
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to={"gioi-thieu"}
-                  className="text-gray-600 hover:text-primary hover:font-[600] transition-colors text-sm"
-                >
-                  Giới thiệu
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to={"/lien-he"}
-                  className="text-gray-600 hover:text-primary hover:font-[600] transition-colors text-sm"
-                >
-                  Liên hệ
-                </Link>
-              </li>
+              {quickLinks.map((link, index) => (
+                <li key={index}>
+                  <NavLink
+                    to={link.path}
+                    className="link-menu hover:text-primary text-gray-600 text-sm"
+                  >
+                    {link.label}
+                  </NavLink>
+                </li>
+              ))}
             </ul>
           </div>
 

@@ -1,0 +1,30 @@
+footer {
+  .footer-link {
+    position: relative;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateX(4px);
+    }
+  }
+
+  a[href*="facebook"],
+  a[href*="youtube"],
+  a[href*="instagram"],
+  a[href*="linkedin"] {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+      transform: scale(1.15) translateY(-2px);
+      filter: drop-shadow(0 4px 8px rgba(81, 45, 168, 0.2));
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .quick-link {
+    &:hover {
+      transform: translateX(2px);
+    }
+  }
+}
