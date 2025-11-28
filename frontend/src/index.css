@@ -43,3 +43,33 @@ body {
 .custom-button-antd:active {
   transform: translateY(0);
 }
+
+.link-menu {
+  position: relative;
+  display: inline-block;
+  transition: all 0.3s ease;
+  color: #666;
+}
+
+.link-menu::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #512da8;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.link-menu:hover::after {
+  width: 100%;
+}
+
+.link-menu.active {
+  color: #512da8;
+}
+
+.link-menu.active::after {
+  width: 100%;
+}
