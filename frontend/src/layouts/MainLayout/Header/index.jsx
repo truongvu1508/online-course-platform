@@ -14,13 +14,11 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
-import Typography from "@mui/material/Typography";
-import PersonAdd from "@mui/icons-material/PersonAdd";
-import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { App } from "antd";
 import Skeleton from "@mui/material/Skeleton";
 
@@ -46,9 +44,8 @@ const Header = () => {
       avatar: "",
     });
     message.success("Đăng xuất thành công");
-    navigate("/dang-nhap");
+    navigate("/");
   };
-  console.log(user);
 
   const navItems = [
     { path: "/", label: "Trang chủ" },
@@ -56,6 +53,33 @@ const Header = () => {
     { path: "/gioi-thieu", label: "Giới thiệu" },
     { path: "/lien-he", label: "Liên hệ" },
   ];
+
+  const getRoleDisplayName = (role) => {
+    const roleMap = {
+      ADMIN: "Quản trị viên",
+      USER: "Người dùng",
+      STUDENT: "Học viên",
+    };
+    return roleMap[role] || role;
+  };
+
+  const getRoleColor = (role) => {
+    const roleColors = {
+      ADMIN: "#dc2626",
+      TEACHER: "#2563eb",
+      STUDENT: "#311B92",
+    };
+    return roleColors[role] || "#6b7280";
+  };
+
+  const getRoleBackground = (role) => {
+    const roleBackgrounds = {
+      ADMIN: "#fee2e2",
+      TEACHER: "#dbeafe",
+      STUDENT: "#D1C4E9",
+    };
+    return roleBackgrounds[role] || "#f3f4f6";
+  };
 
   return (
     <header className="bg-white shadow-md">
@@ -203,6 +227,15 @@ const Header = () => {
                       <div className="flex flex-col">
                         <h3 className="text-sm">{user.fullName}</h3>
                         <span className="text-xs">{user.email}</span>
+                        <span
+                          className="text-xs font-medium mt-1 px-2 py-0.5 rounded-full inline-block w-fit"
+                          style={{
+                            color: getRoleColor(user.role),
+                            backgroundColor: getRoleBackground(user.role),
+                          }}
+                        >
+                          {getRoleDisplayName(user.role)}
+                        </span>
                       </div>
                     </div>
                   </MenuItem>
@@ -213,18 +246,32 @@ const Header = () => {
                     </ListItemIcon>
                     Thông tin tài khoản
                   </MenuItem>
-                  <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                      <MenuBookIcon fontSize="small" />
-                    </ListItemIcon>
-                    Khóa học của tôi
-                  </MenuItem>
-                  <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                      <LocalMallIcon fontSize="small" />
-                    </ListItemIcon>
-                    Đơn hàng của tôi
-                  </MenuItem>
+
+                  {user.role === "ADMIN" ? (
+                    <>
+                      <MenuItem onClick={() => navigate("/admin")}>
+                        <ListItemIcon>
+                          <AdminPanelSettingsIcon fontSize="small" />
+                        </ListItemIcon>
+                        Trang quản trị
+                      </MenuItem>
+                    </>
+                  ) : (
+                    <>
+                      <MenuItem onClick={handleClose}>
+                        <ListItemIcon>
+                          <MenuBookIcon fontSize="small" />
+                        </ListItemIcon>
+                        Khóa học của tôi
+                      </MenuItem>
+                      <MenuItem onClick={handleClose}>
+                        <ListItemIcon>
+                          <LocalMallIcon fontSize="small" />
+                        </ListItemIcon>
+                        Đơn hàng của tôi
+                      </MenuItem>
+                    </>
+                  )}
                   <Divider />
                   <MenuItem onClick={handleLogout}>
                     <ListItemIcon>
