@@ -37,6 +37,7 @@ const LoginPage = () => {
         setUser(res.data.user);
 
         form.resetFields();
+
         setTimeout(() => navigate("/"));
       } else {
         notification.error({
