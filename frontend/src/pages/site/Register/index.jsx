@@ -1,7 +1,7 @@
 import { App, Button, Form, Input } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { registerService } from "../../../services/auth.service";
+import { registerService } from "../../../services/public/auth.service";
 
 const RegisterPage = () => {
   const [form] = Form.useForm();

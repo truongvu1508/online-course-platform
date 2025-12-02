@@ -13,6 +13,7 @@ import CourseAdminPage from "../pages/admin/Course";
 import OrderAdminPage from "../pages/admin/Order";
 import StudentAdminPage from "../pages/admin/Student";
 import CategoryAdminPage from "../pages/admin/Category";
+import UserAdminPage from "../pages/admin/User";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
       { path: "khoa-hoc", element: <CourseAdminPage /> },
       { path: "don-hang", element: <OrderAdminPage /> },
       { path: "hoc-vien", element: <StudentAdminPage /> },
+      { path: "nguoi-dung", element: <UserAdminPage /> },
     ],
   },
   {

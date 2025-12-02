@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { getAccountService } from "../services/auth.service";
+import { getAccountService } from "../services/shared/auth.service";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext({

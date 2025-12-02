@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import {
   resendVerificationCodeService,
   verifyEmailService,
-} from "../../../services/auth.service";
+} from "../../../services/public/auth.service";
 import { colors } from "../../../utils/colors";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 

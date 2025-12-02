@@ -102,7 +102,6 @@ const getUserById = async (req, res) => {
 const createUser = async (req, res) => {
   try {
     const { email, fullName, phone, password, address, role } = req.body;
-    console.log(req.body);
 
     let avatarURL = "";
 

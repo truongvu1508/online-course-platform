@@ -80,7 +80,6 @@ const uploadMultipleFiles = async (req, res) => {
 const deleteFromCloudinary = async (req, res) => {
   try {
     const { publicId } = req.body;
-    console.log(req.body);
 
     // upload to Cloudinary
     await deleteFromCloudinaryService(publicId);
