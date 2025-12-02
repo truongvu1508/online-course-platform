@@ -1,34 +1,48 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import CategoryIcon from "@mui/icons-material/Category";
+import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import SchoolIcon from "@mui/icons-material/School";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import PeopleIcon from "@mui/icons-material/People";
+import AnalyticsIcon from "@mui/icons-material/Analytics";
+import PersonIcon from "@mui/icons-material/Person";
+import CollectionsBookmarkIcon from "@mui/icons-material/CollectionsBookmark";
 import { colors } from "../../../utils/colors";
+import { App } from "antd";
+import { AuthContext } from "../../../contexts/auth.context";
+import Button from "@mui/material/Button";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const Sidebar = () => {
+  const { setUser } = useContext(AuthContext);
+  const { message } = App.useApp();
+
+  const navigate = useNavigate();
   const location = useLocation();
 
   const menuItems = [
     {
       title: "Dashboard",
-      icon: <DashboardIcon />,
+      icon: <AnalyticsIcon />,
       path: "/admin",
     },
     {
       title: "Danh mục",
-      icon: <CategoryIcon />,
+      icon: <CollectionsBookmarkIcon />,
       path: "/admin/danh-muc-khoa-hoc",
     },
     {
       title: "Khóa học",
-      icon: <SchoolIcon />,
+      icon: <AutoStoriesIcon />,
       path: "/admin/khoa-hoc",
+    },
+    {
+      title: "Học viên",
+      icon: <SchoolIcon />,
+      path: "/admin/hoc-vien",
     },
     {
       title: "Đơn hàng",
@@ -36,14 +50,27 @@ const Sidebar = () => {
       path: "/admin/don-hang",
     },
     {
-      title: "Học viên",
-      icon: <PeopleIcon />,
-      path: "/admin/hoc-vien",
+      title: "Người dùng",
+      icon: <PersonIcon />,
+      path: "/admin/nguoi-dung",
     },
   ];
 
+  const handleLogout = () => {
+    localStorage.removeItem("access_token");
+    setUser({
+      id: "",
+      email: "",
+      fullName: "",
+      role: "",
+      avatar: "",
+    });
+    message.success("Đăng xuất thành công");
+    navigate("/");
+  };
+
   return (
-    <aside className="col-span-2 bg-white text-gray-800 border-r border-gray-200 min-h-full">
+    <aside className="w-64 bg-white text-gray-800 border-r border-gray-200 flex-shrink-0 flex flex-col justify-between">
       <div className="p-4">
         <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
           Quản trị
@@ -98,6 +125,17 @@ const Sidebar = () => {
             );
           })}
         </List>
+      </div>
+      <div className="w-full flex justify-center mb-3">
+        <Button
+          onClick={handleLogout}
+          variant="outlined"
+          color="error"
+          size="large"
+          startIcon={<LogoutIcon />}
+        >
+          Đăng xuất
+        </Button>
       </div>
     </aside>
   );

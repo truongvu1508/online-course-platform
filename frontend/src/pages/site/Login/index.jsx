@@ -1,9 +1,8 @@
 import { App, Button, Divider, Form, Input } from "antd";
-import { GoogleOutlined } from "@ant-design/icons";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../contexts/auth.context";
-import { loginService } from "../../../services/auth.service";
+import { loginService } from "../../../services/public/auth.service";
 import { colors } from "../../../utils/colors";
 
 const LoginPage = () => {

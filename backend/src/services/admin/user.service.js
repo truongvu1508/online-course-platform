@@ -43,8 +43,6 @@ const getAllUsersService = async (limit, page, queryString) => {
         users,
         total: users.length,
       };
-
-      console.log(result);
     }
 
     return result;

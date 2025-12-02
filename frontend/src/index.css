@@ -73,3 +73,24 @@ body {
 .link-menu.active::after {
   width: 100%;
 }
+
+.ant-spin-dot-item {
+  background-color: #512da8 !important;
+}
+
+.ant-pagination-item {
+  border-color: #512da8 !important;
+}
+
+.ant-pagination-item a {
+  color: #512da8 !important;
+}
+
+.ant-pagination-item-active {
+  border-color: #512da8 !important;
+  background-color: #512da8 !important;
+}
+
+.ant-pagination-item-active a {
+  color: #fff !important;
+}

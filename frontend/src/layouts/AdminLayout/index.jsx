@@ -6,11 +6,11 @@ import Sidebar from "./Sidebar";
 
 const AdminLayout = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="h-screen flex flex-col">
       <Header />
-      <div className="flex-grow grid grid-cols-12">
+      <div className="flex-1 flex overflow-hidden">
         <Sidebar />
-        <main className="bg-gray-100 col-span-10 p-6 overflow-auto">
+        <main className="flex-1 bg-gray-100 p-6 overflow-y-auto">
           <Outlet />
         </main>
       </div>
