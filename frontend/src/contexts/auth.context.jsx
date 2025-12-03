@@ -28,6 +28,7 @@ export const AuthWrapper = (props) => {
       setAppLoading(false);
       return;
     }
+
     try {
       const res = await getAccountService();
       console.log(res);
