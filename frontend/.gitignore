@@ -68,7 +68,7 @@ out/
 
 # Gatsby files (if using)
 .cache/
-public
+/public
 
 # Vite
 *.local

@@ -1,7 +1,20 @@
 import axios from "../../customs/axios.customize";
 
-const getAllUserService = async (currentPage, pageSize) => {
-  const URL_BACKEND = `/admin/users?limit=${pageSize}&page=${currentPage}`;
+const getAllUserService = async (
+  currentPage,
+  pageSize,
+  searchText = "",
+  filterRole = null
+) => {
+  let URL_BACKEND = `/admin/users?limit=${pageSize}&page=${currentPage}`;
+
+  if (searchText && searchText.trim() !== "") {
+    URL_BACKEND += `&fullName=${searchText.trim()}`;
+  }
+
+  if (filterRole) {
+    URL_BACKEND += `&role=${filterRole}`;
+  }
 
   const response = await axios.get(URL_BACKEND);
 
