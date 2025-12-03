@@ -1,12 +1,6 @@
 import { Space, Table, Tag, Button, Popconfirm, message, Input } from "antd";
-import {
-  EyeOutlined,
-  DeleteOutlined,
-  SearchOutlined,
-  EditOutlined,
-} from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { deleteUserByIdService } from "../../../services/admin/user.service";
-import { useState } from "react";
 
 const TableUser = (props) => {
   const {
@@ -20,8 +14,9 @@ const TableUser = (props) => {
     pageSize,
     setPageSize,
     total,
+    filterRole,
+    setFilterRole,
   } = props;
-  const [searchText, setSearchText] = useState("");
 
   const columns = [
     {
@@ -57,6 +52,7 @@ const TableUser = (props) => {
       dataIndex: "fullName",
       key: "fullName",
       width: 180,
+      sorter: (a, b) => a.fullName.length - b.fullName.length,
     },
     {
       title: "Email",
@@ -77,6 +73,11 @@ const TableUser = (props) => {
       key: "role",
       width: 100,
       align: "center",
+      filters: [
+        { text: "ADMIN", value: "ADMIN" },
+        { text: "STUDENT", value: "STUDENT" },
+      ],
+      filteredValue: filterRole ? [filterRole] : null,
       render: (role) => {
         const colors = {
           ADMIN: "red",
@@ -91,6 +92,7 @@ const TableUser = (props) => {
       key: "lastLoginAt",
       width: 150,
       render: (date) => (date ? new Date(date).toLocaleString("vi-VN") : "---"),
+      sorter: (a, b) => new Date(a.lastLoginAt) - new Date(b.lastLoginAt),
     },
     {
       title: "Hành động",
@@ -140,7 +142,16 @@ const TableUser = (props) => {
     }
   };
 
-  const onChange = (pagination) => {
+  const onChange = (pagination, filters) => {
+    if (filters !== undefined && "role" in filters) {
+      const newFilterRole =
+        filters.role && filters.role.length > 0 ? filters.role[0] : null;
+
+      if (newFilterRole !== filterRole) {
+        setFilterRole(newFilterRole);
+        setCurrentPage(1);
+      }
+    }
     // change current page
     if (pagination && pagination.current) {
       if (pagination.current !== currentPage) {
@@ -157,16 +168,6 @@ const TableUser = (props) => {
 
   return (
     <div>
-      <div style={{ marginBottom: 16 }}>
-        <Input
-          placeholder="Tìm kiếm theo tên, email..."
-          prefix={<SearchOutlined />}
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          style={{ width: 300 }}
-        />
-      </div>
-
       <Table
         dataSource={dataUsers}
         columns={columns}

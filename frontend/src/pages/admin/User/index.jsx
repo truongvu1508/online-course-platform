@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { getAllUserService } from "../../../services/admin/user.service";
 import TableUser from "../../../components/admin/User/TableUser";
 import ModalCreateUser from "../../../components/admin/User/ModalCreateUser";
-import { Button } from "antd";
+import { Button, Input } from "antd";
 import ModalUpdateUser from "../../../components/admin/User/ModalUpdateUser";
+import { SearchOutlined } from "@ant-design/icons";
 
 const UserAdminPage = () => {
   const [loading, setLoading] = useState(false);
@@ -14,15 +15,22 @@ const UserAdminPage = () => {
   const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
   const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
   const [dataUpdate, setDataUpdate] = useState(null);
+  const [searchText, setSearchText] = useState("");
+  const [filterRole, setFilterRole] = useState(null);
 
   useEffect(() => {
     loadUser();
-  }, [currentPage, pageSize]);
+  }, [currentPage, pageSize, searchText, filterRole]);
 
   const loadUser = async () => {
     try {
       setLoading(true);
-      const res = await getAllUserService(currentPage, pageSize);
+      const res = await getAllUserService(
+        currentPage,
+        pageSize,
+        searchText,
+        filterRole
+      );
 
       if (res.data) {
         setDataUsers(res.data);
@@ -36,22 +44,44 @@ const UserAdminPage = () => {
       setLoading(false);
     }
   };
+
+  const handleSearch = (value) => {
+    setSearchText(value);
+    setCurrentPage(1);
+  };
   return (
     <>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">
-          Danh sách người dùng
-        </h1>
-        <Button
-          onClick={() => {
-            setIsModalCreateOpen(true);
-          }}
-          type="primary"
-          size="large"
-          className="rounded-lg"
-        >
-          Tạo mới người dùng
-        </Button>
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800 mb-3">
+            Danh sách người dùng
+          </h1>
+          <Button
+            onClick={() => {
+              setIsModalCreateOpen(true);
+            }}
+            type="primary"
+            size="large"
+            className="rounded-lg"
+          >
+            Tạo mới người dùng
+          </Button>
+        </div>
+
+        <div style={{ width: 300 }}>
+          <Input.Search
+            placeholder="Tìm kiếm theo tên"
+            allowClear
+            enterButton={<SearchOutlined />}
+            size="large"
+            onSearch={handleSearch}
+            onChange={(e) => {
+              if (e.target.value === "") {
+                handleSearch("");
+              }
+            }}
+          />
+        </div>
       </div>
 
       <TableUser
@@ -65,6 +95,8 @@ const UserAdminPage = () => {
         pageSize={pageSize}
         setPageSize={setPageSize}
         total={total}
+        filterRole={filterRole}
+        setFilterRole={setFilterRole}
       />
 
       <ModalCreateUser

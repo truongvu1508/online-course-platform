@@ -2,6 +2,7 @@ import CodeIcon from "@mui/icons-material/Code";
 import { useContext } from "react";
 import { AuthContext } from "../../../contexts/auth.context";
 import { Link } from "react-router-dom";
+import { Tag } from "antd";
 
 const Header = () => {
   const { user } = useContext(AuthContext);
@@ -16,13 +17,12 @@ const Header = () => {
           <span className="text-xl font-bold text-white">CodeLearn</span>
         </Link>
       </div>
-      <div className="flex-1 p-4 flex items-center justify-end space-x-4">
+      <div className="flex-1 p-4 flex items-center justify-end space-x-1">
         <p className="text-sm">
-          Xin chào Admin{" "}
-          <span className="text-primary-600 bg-primary-200 px-2 py-0.5 rounded-lg font-medium">
-            {user.fullName}
-          </span>
+          Xin chào{" "}
+          <span className="text-primary font-bold">{user.fullName}</span> -{" "}
         </p>
+        <Tag color="purple">{user.role}</Tag>
       </div>
     </div>
   );

@@ -14,6 +14,7 @@ import OrderAdminPage from "../pages/admin/Order";
 import StudentAdminPage from "../pages/admin/Student";
 import CategoryAdminPage from "../pages/admin/Category";
 import UserAdminPage from "../pages/admin/User";
+import ProtectedRoute from "./ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -28,7 +29,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <AdminLayout />,
+    element: (
+      <ProtectedRoute requiredRole="ADMIN">
+        <AdminLayout />
+      </ProtectedRoute>
+    ),
     children: [
       { index: true, element: <DashboardPage /> },
       { path: "danh-muc-khoa-hoc", element: <CategoryAdminPage /> },
