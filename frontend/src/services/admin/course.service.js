@@ -60,10 +60,6 @@ const getCourseByIdService = async (id) => {
   return response;
 };
 
-const getCurrentUserService = async () => {
-  const response = await axios.get("/auth/me");
-  return response.data;
-};
 export {
   getAllCourseService,
   createCourseService,

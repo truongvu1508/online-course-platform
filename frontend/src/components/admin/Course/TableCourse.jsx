@@ -1,5 +1,5 @@
 import { App, Button, Popconfirm, Table, Tag } from "antd";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import { deleteCourseByIdService } from "../../../services/admin/course.service";
 import { getAllCategoryService } from "../../../services/admin/category.service";
@@ -60,11 +60,6 @@ const TableCourse = (props) => {
         duration: 5,
       });
     }
-  };
-
-  const handleEditCourse = (record) => {
-    setDataUpdate(record);
-    setIsModalUpdateOpen(true);
   };
 
   const getLevelLabel = (level) => {
@@ -172,17 +167,16 @@ const TableCourse = (props) => {
       title: "Hành động",
       key: "action",
       width: "15%",
-      fixed: "right",
+      align: "center",
       render: (_, record) => (
         <div className="flex gap-2">
           <Button
             type="primary"
             size="small"
-            icon={<EditOutlined />}
-            onClick={() => handleEditCourse(record)}
+            icon={<EyeOutlined />}
             className="rounded-lg"
           >
-            Sửa
+            Chi Tiết
           </Button>
 
           <Popconfirm

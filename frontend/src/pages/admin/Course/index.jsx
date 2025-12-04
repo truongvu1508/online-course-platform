@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { getAllCourseService } from "../../../services/admin/course.service";
 import TableCourse from "../../../components/admin/Course/TableCourse";
 import ModalCreateCourse from "../../../components/admin/Course/ModalCreateCourse";
-import ModalUpdateCourse from "../../../components/admin/Course/ModalUpdateCourse";
 import { Button, Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 
@@ -105,14 +104,6 @@ const CourseAdminPage = () => {
         loadCourse={loadCourse}
         isModalCreateOpen={isModalCreateOpen}
         setIsModalCreateOpen={setIsModalCreateOpen}
-      />
-
-      <ModalUpdateCourse
-        loadCourse={loadCourse}
-        isModalUpdateOpen={isModalUpdateOpen}
-        setIsModalUpdateOpen={setIsModalUpdateOpen}
-        dataUpdate={dataUpdate}
-        setDataUpdate={setDataUpdate}
       />
     </>
   );
