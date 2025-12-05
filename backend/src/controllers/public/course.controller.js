@@ -10,7 +10,7 @@ import {
 // GET /api/public/courses
 const getPublicCourses = async (req, res) => {
   try {
-    let { limit, page } = req.query;
+    let { limit, page, minRating, duration, level, categoryId } = req.query;
 
     // Validation
     if (limit !== undefined) {
@@ -29,6 +29,46 @@ const getPublicCourses = async (req, res) => {
         return res.status(400).json({
           success: false,
           message: "Page phải là số dương",
+        });
+      }
+    }
+
+    if (minRating !== undefined) {
+      const rating = parseFloat(minRating);
+      if (isNaN(rating) || rating < 0 || rating > 5) {
+        return res.status(400).json({
+          success: false,
+          message: "minRating phải là số từ 0 đến 5",
+        });
+      }
+    }
+
+    // Validate duration
+    if (duration !== undefined) {
+      const validDurations = ["0-5", "5-10", "10-20", "over-20"];
+      const durations = Array.isArray(duration) ? duration : [duration];
+
+      const invalidDuration = durations.find(
+        (d) => !validDurations.includes(d)
+      );
+      if (invalidDuration) {
+        return res.status(400).json({
+          success: false,
+          message: `Duration không hợp lệ: ${invalidDuration}`,
+        });
+      }
+    }
+
+    // Validate level
+    if (level !== undefined) {
+      const validLevels = ["beginner", "intermediate", "advanced"];
+      const levels = Array.isArray(level) ? level : [level];
+
+      const invalidLevel = levels.find((l) => !validLevels.includes(l));
+      if (invalidLevel) {
+        return res.status(400).json({
+          success: false,
+          message: `Level không hợp lệ: ${invalidLevel}`,
         });
       }
     }
