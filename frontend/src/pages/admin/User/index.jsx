@@ -49,6 +49,7 @@ const UserAdminPage = () => {
     setSearchText(value);
     setCurrentPage(1);
   };
+
   return (
     <>
       <div className="flex justify-between items-center mb-6">

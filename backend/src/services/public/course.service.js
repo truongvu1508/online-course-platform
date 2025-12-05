@@ -22,6 +22,9 @@ const getAllPublicCoursesService = async (limit, page, queryString) => {
       const { filter } = aqp(queryString);
 
       delete filter.page;
+
+      const minRatingValue = filter.minRating;
+      delete filter.minRating;
       let offset = (page - 1) * limit;
 
       const processedFilter = processPartialSearch(
@@ -32,6 +35,43 @@ const getAllPublicCoursesService = async (limit, page, queryString) => {
 
       processedFilter.status = "published";
       processedFilter.isPublished = true;
+
+      if (minRatingValue) {
+        const minRating = parseFloat(minRatingValue);
+        if (!isNaN(minRating)) {
+          processedFilter.averageRating = { $gte: minRating };
+        }
+      }
+
+      if (filter.duration) {
+        const durations = Array.isArray(filter.duration)
+          ? filter.duration
+          : [filter.duration];
+
+        const durationConditions = [];
+
+        durations.forEach((range) => {
+          if (range === "0-5") {
+            durationConditions.push({ totalDuration: { $lte: 5 * 3600 } });
+          } else if (range === "5-10") {
+            durationConditions.push({
+              totalDuration: { $gt: 5 * 3600, $lte: 10 * 3600 },
+            });
+          } else if (range === "10-20") {
+            durationConditions.push({
+              totalDuration: { $gt: 10 * 3600, $lte: 20 * 3600 },
+            });
+          } else if (range === "over-20") {
+            durationConditions.push({ totalDuration: { $gt: 20 * 3600 } });
+          }
+        });
+
+        if (durationConditions.length > 0) {
+          processedFilter.$or = durationConditions;
+        }
+
+        delete processedFilter.duration;
+      }
 
       const [courses, totalCourses] = await Promise.all([
         Course.find(processedFilter)

@@ -6,6 +6,15 @@ import router from "./routes/index.jsx";
 import { App, ConfigProvider } from "antd";
 import { AuthWrapper } from "./contexts/auth.context.jsx";
 import viVN from "antd/locale/vi_VN";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+const muiTheme = createTheme({
+  palette: {
+    primary: {
+      main: "#512DA8",
+    },
+  },
+});
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -13,11 +22,13 @@ createRoot(document.getElementById("root")).render(
       locale={viVN}
       theme={{ token: { colorPrimary: "#512DA8" } }}
     >
-      <AuthWrapper>
-        <App>
-          <RouterProvider router={router} />
-        </App>
-      </AuthWrapper>
+      <ThemeProvider theme={muiTheme}>
+        <AuthWrapper>
+          <App>
+            <RouterProvider router={router} />
+          </App>
+        </AuthWrapper>
+      </ThemeProvider>
     </ConfigProvider>
   </StrictMode>
 );
