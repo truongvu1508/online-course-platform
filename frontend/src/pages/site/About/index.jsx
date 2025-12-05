@@ -81,7 +81,7 @@ const AboutPage = () => {
   ];
 
   return (
-    <div className="about-page">
+    <div className="about-page fade-in-up">
       <section className="about-hero bg-secondary py-20">
         <div className="container">
           <div className="max-w-2xl mx-auto text-center">

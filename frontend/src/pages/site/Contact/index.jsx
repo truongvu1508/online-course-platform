@@ -4,9 +4,7 @@ import {
   MailOutlined,
   PhoneOutlined,
   EnvironmentOutlined,
-  SendOutlined,
 } from "@ant-design/icons";
-import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from "react-icons/fa";
 import "./ContactPage.scss";
 
 const ContactPage = () => {
@@ -51,7 +49,7 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="contact-page">
+    <div className="contact-page fade-in-up">
       <section className="contact-hero bg-secondary py-20">
         <div className="container">
           <div className="max-w-2xl mx-auto text-center">
