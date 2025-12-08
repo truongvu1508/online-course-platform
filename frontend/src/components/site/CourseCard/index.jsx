@@ -3,10 +3,20 @@ import { CiClock1 } from "react-icons/ci";
 import { FaBookOpenReader, FaUserGraduate } from "react-icons/fa6";
 import { formatDuration, formatVND } from "../../../utils/formatters";
 import ReactStars from "react-stars";
+import { useNavigate } from "react-router-dom";
 
 const CourseCard = ({ course }) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate(`/khoa-hoc/${course.slug}`);
+  };
+
   return (
-    <div className="course-card bg-white rounded-md hover:shadow-primary shadow-ms hover:shadow-lg transition-all duration-300 cursor-pointer">
+    <div
+      className="course-card bg-white rounded-md hover:shadow-primary shadow-ms hover:shadow-lg transition-all duration-300 cursor-pointer"
+      onClick={handleCardClick}
+    >
       <div className="w-full h-50 overflow-hidden rounded-t-md relative">
         {/* {isNew && (
           <div className="absolute top-2 left-2 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold z-10">

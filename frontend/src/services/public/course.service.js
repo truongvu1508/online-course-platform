@@ -55,9 +55,16 @@ const getAllCoursesPublic = async (
   return response;
 };
 
+const getCourseBySlugPublic = async (slug) => {
+  const URL_BACKEND = `/courses/${slug}`;
+  const response = await axios.get(URL_BACKEND);
+  return response;
+};
+
 export {
   getCoursesNewestPublic,
   getCoursesBestSellerPublic,
   getCoursesRatingPublic,
   getAllCoursesPublic,
+  getCourseBySlugPublic,
 };
