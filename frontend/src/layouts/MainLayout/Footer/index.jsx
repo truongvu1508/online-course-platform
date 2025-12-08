@@ -3,7 +3,6 @@ import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Button from "@mui/material/Button";
-import { colors } from "../../../utils/colors";
 import { Link, NavLink } from "react-router-dom";
 import "./Footer.scss";
 
@@ -149,14 +148,7 @@ const Footer = () => {
               </a>
             </div>
             <div className="mt-6">
-              <Button
-                variant="contained"
-                size="large"
-                sx={{
-                  backgroundColor: colors.primary.DEFAULT,
-                  "&:hover": { backgroundColor: colors.secondary },
-                }}
-              >
+              <Button variant="contained" size="large">
                 Bắt đầu học ngay
               </Button>
             </div>

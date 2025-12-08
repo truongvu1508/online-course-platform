@@ -283,17 +283,7 @@ const Header = () => {
               </div>
             ) : (
               <Link to={"/dang-nhap"}>
-                <Button
-                  variant="contained"
-                  sx={{
-                    backgroundColor: colors.primary.DEFAULT,
-                    "&:hover": {
-                      backgroundColor: colors.secondary,
-                    },
-                  }}
-                >
-                  Đăng nhập
-                </Button>
+                <Button variant="contained">Đăng nhập</Button>
               </Link>
             )}
           </div>

@@ -15,6 +15,7 @@ import StudentAdminPage from "../pages/admin/Student";
 import CategoryAdminPage from "../pages/admin/Category";
 import UserAdminPage from "../pages/admin/User";
 import ProtectedRoute from "./ProtectedRoute";
+import CourseDetailPage from "../pages/site/CourseDetail";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <HomePage /> },
       { path: "khoa-hoc", element: <CoursesPage /> },
+      { path: "khoa-hoc/:slug", element: <CourseDetailPage /> },
       { path: "gioi-thieu", element: <AboutPage /> },
       { path: "lien-he", element: <ContactPage /> },
     ],
