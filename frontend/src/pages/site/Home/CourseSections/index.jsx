@@ -19,9 +19,6 @@ const CourseSections = () => {
 
   useEffect(() => {
     fetchCourses(selectedTab);
-    console.log(selectedTab);
-
-    console.log(courses);
   }, [selectedTab]);
 
   const fetchCourses = async (tabIndex) => {

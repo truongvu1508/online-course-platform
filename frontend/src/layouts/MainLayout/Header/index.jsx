@@ -21,19 +21,78 @@ import LocalMallIcon from "@mui/icons-material/LocalMall";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { App } from "antd";
 import Skeleton from "@mui/material/Skeleton";
+import { CartContext } from "../../../contexts/cart.context";
+import Popover from "@mui/material/Popover";
+import { formatVND } from "../../../utils/formatters";
+import { removeCourseFromCarte } from "../../../services/student/cart.service";
+import { orderFromCartService } from "../../../services/student/order.service";
 
 const Header = () => {
   const { user, setUser, appLoading } = useContext(AuthContext);
+  const { refreshCart, cartInfo } = useContext(CartContext);
+  const [loadingCart, setLoadingCart] = useState(false);
+  const [loadingPayment, setLoadingPayment] = useState(false);
   const { message } = App.useApp();
   const [anchorEl, setAnchorEl] = useState(null);
-  const navigate = useNavigate();
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
+  const [cartAnchorEl, setCartAnchorEl] = useState(null);
+  const cartOpen = Boolean(cartAnchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleCartOpen = (event) => {
+    setCartAnchorEl(event.currentTarget);
+  };
+
+  const handleCartClose = () => {
+    setCartAnchorEl(null);
+  };
+
+  const handleRemoveCourseFromCart = async (courseId) => {
+    try {
+      setLoadingCart(true);
+      const res = await removeCourseFromCarte(courseId);
+
+      if (res.success) {
+        message.success(res.message);
+        refreshCart();
+      } else {
+        message.warning(res.message);
+      }
+    } catch (error) {
+      message.error("Không thể xóa khóa học khỏi giỏ hàng");
+      console.log(error);
+    } finally {
+      setLoadingCart(false);
+    }
+  };
+
+  const handlePayment = async () => {
+    try {
+      setLoadingPayment(true);
+      const res = await orderFromCartService();
+
+      if (res.success) {
+        message.success(res.message);
+        window.location.href = res.data.paymentInfo;
+      } else {
+        message.warning(res.message);
+      }
+    } catch (error) {
+      message.error("Thanh toán thất bại");
+      console.log(error);
+    } finally {
+      setLoadingPayment(false);
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     setUser({
@@ -110,9 +169,14 @@ const Header = () => {
 
           <div className="actions flex items-center gap-3">
             <Tooltip title="Giỏ hàng" placement="bottom">
-              <IconButton aria-label="cart">
+              <IconButton
+                aria-label="cart"
+                onClick={handleCartOpen}
+                aria-owns={cartOpen ? "mouse-open-cart" : undefined}
+                aria-haspopup="true"
+              >
                 <Badge
-                  badgeContent={0}
+                  badgeContent={cartInfo ? cartInfo.items.length : 0}
                   showZero={true}
                   anchorOrigin={{
                     vertical: "top",
@@ -131,6 +195,99 @@ const Header = () => {
                 </Badge>
               </IconButton>
             </Tooltip>
+            <Popover
+              id="mouse-open-cart"
+              open={cartOpen}
+              anchorEl={cartAnchorEl}
+              onClose={handleCartClose}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "center",
+              }}
+            >
+              {cartInfo ? (
+                cartInfo.items.length === 0 ? (
+                  <div className="p-5 text-primary">
+                    <p className="italic">
+                      Chưa có khóa học nào trong giỏ hàng
+                    </p>
+                  </div>
+                ) : (
+                  <div className="p-5 w-[300px] mb-3 ">
+                    <div>
+                      {cartInfo.items.map((cartItem) => (
+                        <div
+                          key={cartItem.courseId._id}
+                          className="border-b border-gray-300 py-2"
+                        >
+                          <div className="flex items-center gap-2">
+                            <div className="w-[150px] relative">
+                              <img
+                                src={cartItem.courseId.thumbnail}
+                                alt={cartItem.courseId.title}
+                              />
+                              <div
+                                onClick={() =>
+                                  handleRemoveCourseFromCart(
+                                    cartItem.courseId._id
+                                  )
+                                }
+                                className="absolute -top-2 -left-2 cursor-pointer bg-red-500 rounded-full w-[16px] h-[16px] flex items-center justify-center"
+                              >
+                                <p className="text-white">x</p>
+                              </div>
+                            </div>
+                            <div>
+                              <p className="mb-1 text-primary text-sm font-semibold line-clamp-2">
+                                {cartItem.courseId.title}
+                              </p>
+                              <div className="flex items-center justify-between gap-2">
+                                <p className="text-xs text-gray-500 font-semibold line-through">
+                                  {formatVND(cartItem.courseId.price)}
+                                </p>
+                                <p className="text-sm text-primary">
+                                  {formatVND(
+                                    cartItem.courseId.price -
+                                      (cartItem.courseId.price *
+                                        cartItem.courseId.discount) /
+                                        100
+                                  )}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div>
+                      <div className="flex items-center justify-between mb-[16px]">
+                        <p className="text-base">Tổng tiền:</p>
+                        <p className="text-base text-primary font-bold">
+                          {formatVND(cartInfo.totalPrice)}
+                        </p>
+                      </div>
+                      <Button
+                        onClick={handlePayment}
+                        variant="contained"
+                        className="!w-full"
+                        size="small"
+                        loading={loadingPayment}
+                      >
+                        Thanh toán
+                      </Button>
+                    </div>
+                  </div>
+                )
+              ) : (
+                <div className="p-5 text-primary">
+                  <p className="italic">Vui lòng đăng nhập</p>
+                </div>
+              )}
+            </Popover>
             {appLoading ? (
               <Box>
                 <Tooltip title="Đang tải...">
@@ -248,14 +405,12 @@ const Header = () => {
                   </MenuItem>
 
                   {user.role === "ADMIN" ? (
-                    <>
-                      <MenuItem onClick={() => navigate("/admin")}>
-                        <ListItemIcon>
-                          <AdminPanelSettingsIcon fontSize="small" />
-                        </ListItemIcon>
-                        Trang quản trị
-                      </MenuItem>
-                    </>
+                    <MenuItem onClick={() => navigate("/admin")}>
+                      <ListItemIcon>
+                        <AdminPanelSettingsIcon fontSize="small" />
+                      </ListItemIcon>
+                      Trang quản trị
+                    </MenuItem>
                   ) : (
                     <>
                       <MenuItem onClick={handleClose}>

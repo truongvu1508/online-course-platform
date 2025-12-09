@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+/* eslint-disable no-unused-vars */
+import { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { App } from "antd";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -19,12 +20,18 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { addToCardService } from "../../../services/student/cart.service";
+import { CartContext } from "../../../contexts/cart.context";
+import { orderNowService } from "../../../services/student/order.service";
 
 const CourseDetailPage = () => {
+  const { refreshCart } = useContext(CartContext);
   const { slug } = useParams();
   const navigate = useNavigate();
   const { message } = App.useApp();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [loadingCart, setLoadingCart] = useState(false);
+  const [loadingPayment, setLoadingPayment] = useState(false);
   const [course, setCourse] = useState(null);
 
   useEffect(() => {
@@ -49,6 +56,44 @@ const CourseDetailPage = () => {
       navigate("/khoa-hoc");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleAddToCart = async () => {
+    try {
+      setLoadingCart(true);
+      const res = await addToCardService(course._id);
+
+      if (res.success) {
+        message.success(res.message);
+        refreshCart();
+      } else {
+        message.warning(res.message);
+      }
+    } catch (error) {
+      message.error("Không thể thêm vào giỏ hàng");
+      navigate("/khoa-hoc");
+    } finally {
+      setLoadingCart(false);
+    }
+  };
+
+  const handlePaymentNow = async (courseId) => {
+    try {
+      setLoadingPayment(true);
+      const res = await orderNowService(courseId);
+
+      if (res.success) {
+        message.success(res.message);
+        window.location.href = res.data.paymentInfo;
+      } else {
+        message.warning(res.message);
+      }
+    } catch (error) {
+      message.error("Thanh toán thất bại");
+      console.log(error);
+    } finally {
+      setLoadingPayment(false);
     }
   };
 
@@ -86,8 +131,6 @@ const CourseDetailPage = () => {
     };
     return configs[level] || { label: level, bgColor: "bg-primary" };
   };
-
-  console.log(course);
 
   return (
     <section className="min-h-screen fade-in-up">
@@ -151,8 +194,12 @@ const CourseDetailPage = () => {
           </div>
           <div className="col-span-4 relative">
             <div className="absolute bg-white px-[5px] pt-[5px] pb-[20px] shadow-xl hover:shadow-primary transition-all duration-300 rounded-lg">
-              <div className="">
-                <img src={course.thumbnail} alt="" className="rounded-lg" />
+              <div className="w-[440px] overflow-hidden">
+                <img
+                  src={course.thumbnail}
+                  alt={course.title}
+                  className="rounded-lg w-full h-full object-cover"
+                />
               </div>
               <div className="p-3">
                 <div className="flex items-center justify-between mb-[16px]">
@@ -166,10 +213,21 @@ const CourseDetailPage = () => {
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 mb-[16px]">
-                  <Button variant="contained" className="!w-full" size="large">
+                  <Button
+                    onClick={handleAddToCart}
+                    variant="contained"
+                    className="!w-full"
+                    size="large"
+                    loading={loadingCart}
+                  >
                     Thêm vào giỏ hàng
                   </Button>
-                  <Button variant="outlined" className="!w-full" size="large">
+                  <Button
+                    onClick={() => handlePaymentNow(course._id)}
+                    variant="outlined"
+                    className="!w-full"
+                    size="large"
+                  >
                     Mua ngay
                   </Button>
                 </div>
