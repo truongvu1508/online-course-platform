@@ -38,3 +38,12 @@ export const formatTime = (seconds) => {
 
   return `${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
 };
+
+export const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("vi-VN", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+};
