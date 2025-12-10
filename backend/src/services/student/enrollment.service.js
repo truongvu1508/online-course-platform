@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import Course from "../../models/course.model.js";
 import Enroll from "../../models/enrollment.model.js";
 import Order from "../../models/order.model.js";
+import Chapter from "../../models/chapter.model.js";
+import Lecture from "../../models/lecture.model.js";
 
 const enrollmentFields =
   "_id userId courseId orderId enrolledAt expiresAt progress status";
@@ -135,7 +137,42 @@ const getEnrollmentByIdService = async (enrollmentId, userId) => {
       throw new Error("Bạn không có quyền truy cập enrollment này");
     }
 
-    return enrollment;
+    const chapters = await Chapter.find({ courseId: enrollment.courseId._id })
+      .sort({ order: 1 })
+      .lean();
+
+    const lectures = await Lecture.find({ courseId: enrollment.courseId._id })
+      .sort({ order: 1 })
+      .lean();
+
+    const chaptersWithLectures = chapters.map((chapter) => ({
+      ...chapter,
+      lectures: lectures
+        .filter(
+          (lecture) => lecture.chapterId.toString() === chapter._id.toString()
+        )
+        .map((lecture) => ({
+          _id: lecture._id,
+          title: lecture.title,
+          description: lecture.description,
+          order: lecture.order,
+          videoDuration: lecture.videoDuration,
+          videoUrl: lecture.videoUrl,
+          content: lecture.content,
+          isFree: lecture.isFree,
+        })),
+    }));
+
+    //chuyen tu document sang object
+    const enrollmentData = enrollment.toObject();
+
+    return {
+      ...enrollmentData,
+      courseId: {
+        ...enrollmentData.courseId,
+        curriculum: chaptersWithLectures,
+      },
+    };
   } catch (error) {
     console.error("Error getting enrollment by ID:", error);
     throw error;
