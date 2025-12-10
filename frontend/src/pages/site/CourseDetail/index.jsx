@@ -23,6 +23,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { addToCardService } from "../../../services/student/cart.service";
 import { CartContext } from "../../../contexts/cart.context";
 import { orderNowService } from "../../../services/student/order.service";
+import YouTube from "react-youtube";
 
 const CourseDetailPage = () => {
   const { refreshCart } = useContext(CartContext);
@@ -32,6 +33,7 @@ const CourseDetailPage = () => {
   const [loading, setLoading] = useState(false);
   const [loadingCart, setLoadingCart] = useState(false);
   const [loadingPayment, setLoadingPayment] = useState(false);
+  const [previewVideo, setPreviewVideo] = useState(null);
   const [course, setCourse] = useState(null);
 
   useEffect(() => {
@@ -114,6 +116,26 @@ const CourseDetailPage = () => {
     return null;
   }
 
+  const getYouTubeVideoId = (url) => {
+    if (!url) return null;
+    const regex =
+      /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+    const match = url.match(regex);
+    return match ? match[1] : null;
+  };
+
+  const handlePreviewClick = (lecture) => {
+    setPreviewVideo(lecture);
+  };
+
+  const youtubeOpts = {
+    height: "100%",
+    width: "100%",
+    playerVars: {
+      autoplay: 1,
+    },
+  };
+
   const getLevelConfig = (level) => {
     const configs = {
       beginner: {
@@ -194,12 +216,32 @@ const CourseDetailPage = () => {
           </div>
           <div className="col-span-4 relative">
             <div className="absolute bg-white px-[5px] pt-[5px] pb-[20px] shadow-xl hover:shadow-primary transition-all duration-300 rounded-lg">
-              <div className="w-[440px] overflow-hidden">
-                <img
-                  src={course.thumbnail}
-                  alt={course.title}
-                  className="rounded-lg w-full h-full object-cover"
-                />
+              <div className="relative w-full aspect-video bg-black">
+                {previewVideo ? (
+                  <div className="relative w-[440px] h-[250px] overflow-hidden">
+                    <YouTube
+                      videoId={getYouTubeVideoId(previewVideo.videoUrl)}
+                      opts={youtubeOpts}
+                      className="absolute top-0 left-0 w-full h-full"
+                    />
+                    <button
+                      onClick={() => setPreviewVideo(null)}
+                      className="absolute top-2 left-2 bg-red-500 text-white px-3 py-1 rounded-full text-sm hover:bg-opacity-90 transition-all z-10"
+                    >
+                      Đóng
+                    </button>
+                  </div>
+                ) : (
+                  <img
+                    src={course.thumbnail}
+                    alt={course.title}
+                    className="w-full h-full object-cover"
+                  />
+                )}
+
+                <div className="absolute top-2 right-2 bg-primary text-white px-3 py-1 rounded-full text-xs font-semibold z-10">
+                  {course.discount} %
+                </div>
               </div>
               <div className="p-3">
                 <div className="flex items-center justify-between mb-[16px]">
@@ -269,9 +311,6 @@ const CourseDetailPage = () => {
                 </div>
               </div>
             </div>
-            <div className="absolute top-2 right-2 bg-primary text-white px-3 py-1 rounded-full text-xs font-semibold z-10">
-              {course.discount} %
-            </div>
           </div>
         </div>
       </div>
@@ -328,8 +367,8 @@ const CourseDetailPage = () => {
                                 <div className="flex items-center justify-center gap-2 text-sm text-primary font-semibold ">
                                   <FaPlayCircle />
                                   <Link
-                                    to={lecture.videoUrl}
-                                    className=" hover:text-primary-300"
+                                    onClick={() => handlePreviewClick(lecture)}
+                                    className="hover:text-primary-300"
                                   >
                                     <span className="underline">Học thử</span>
                                   </Link>

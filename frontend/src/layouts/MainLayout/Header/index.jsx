@@ -413,11 +413,13 @@ const Header = () => {
                     </MenuItem>
                   ) : (
                     <>
-                      <MenuItem onClick={handleClose}>
-                        <ListItemIcon>
-                          <MenuBookIcon fontSize="small" />
-                        </ListItemIcon>
-                        Khóa học của tôi
+                      <MenuItem>
+                        <Link to={"/khoa-hoc-cua-toi"}>
+                          <ListItemIcon>
+                            <MenuBookIcon fontSize="small" />
+                          </ListItemIcon>
+                          Khóa học của tôi
+                        </Link>
                       </MenuItem>
                       <MenuItem onClick={handleClose}>
                         <ListItemIcon>
