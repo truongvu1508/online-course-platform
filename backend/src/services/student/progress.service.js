@@ -17,6 +17,14 @@ const UpdateCourseProgressService = async (userId, enrollmentId, lectureId) => {
       throw new Error("Cannot update progress for inactive enrollment");
     }
 
+    const existingProgress = await CourseProgress.findOne({ enrollmentId });
+    if (
+      existingProgress &&
+      existingProgress.completedLectures.some((id) => id.equals(lectureId))
+    ) {
+      throw new Error("Bài giảng này đã được hoàn thành");
+    }
+
     const totalLectures = await Lecture.countDocuments({
       courseId: enrollment.courseId,
     });

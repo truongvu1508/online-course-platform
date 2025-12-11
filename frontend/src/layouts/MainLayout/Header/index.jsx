@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import CodeIcon from "@mui/icons-material/Code";
 import Badge from "@mui/material/Badge";
 import IconButton from "@mui/material/IconButton";
@@ -412,22 +413,12 @@ const Header = () => {
                       Trang quản trị
                     </MenuItem>
                   ) : (
-                    <>
-                      <MenuItem>
-                        <Link to={"/khoa-hoc-cua-toi"}>
-                          <ListItemIcon>
-                            <MenuBookIcon fontSize="small" />
-                          </ListItemIcon>
-                          Khóa học của tôi
-                        </Link>
-                      </MenuItem>
-                      <MenuItem onClick={handleClose}>
-                        <ListItemIcon>
-                          <LocalMallIcon fontSize="small" />
-                        </ListItemIcon>
-                        Đơn hàng của tôi
-                      </MenuItem>
-                    </>
+                    <MenuItem onClick={() => navigate("/khoa-hoc-cua-toi")}>
+                      <ListItemIcon>
+                        <MenuBookIcon fontSize="small" />
+                      </ListItemIcon>
+                      Khóa học của tôi
+                    </MenuItem>
                   )}
                   <Divider />
                   <MenuItem onClick={handleLogout}>
