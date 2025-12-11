@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable no-unused-vars */
 import { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
@@ -340,7 +341,7 @@ const CourseDetailPage = () => {
                 <Accordion key={section._id} defaultExpanded={index === 0}>
                   <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     <div className="flex justify-between w-full items-center pr-4">
-                      <h3 className="font-medium text-lg">
+                      <h3 className="font-medium text-primary text-lg">
                         {section.order}. {section.title}
                       </h3>
                       <p className="text-sm text-gray-600">

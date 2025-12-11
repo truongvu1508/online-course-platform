@@ -4,6 +4,7 @@ import Enroll from "../../models/enrollment.model.js";
 import Order from "../../models/order.model.js";
 import Chapter from "../../models/chapter.model.js";
 import Lecture from "../../models/lecture.model.js";
+import CourseProgress from "../../models/courseProgress.model.js";
 
 const enrollmentFields =
   "_id userId courseId orderId enrolledAt expiresAt progress status";
@@ -137,6 +138,16 @@ const getEnrollmentByIdService = async (enrollmentId, userId) => {
       throw new Error("Bạn không có quyền truy cập enrollment này");
     }
 
+    const courseProgress = await CourseProgress.findOne({
+      enrollmentId,
+    }).lean();
+
+    const completedLectureIds = courseProgress?.completedLectures || [];
+
+    const completedLectureIdsSet = new Set(
+      completedLectureIds.map((id) => id.toString())
+    );
+
     const chapters = await Chapter.find({ courseId: enrollment.courseId._id })
       .sort({ order: 1 })
       .lean();
@@ -160,6 +171,7 @@ const getEnrollmentByIdService = async (enrollmentId, userId) => {
           videoUrl: lecture.videoUrl,
           content: lecture.content,
           isFree: lecture.isFree,
+          isCompleted: completedLectureIdsSet.has(lecture._id.toString()),
         })),
     }));
 
