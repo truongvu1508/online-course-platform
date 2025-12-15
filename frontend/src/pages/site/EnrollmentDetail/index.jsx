@@ -64,6 +64,13 @@ const EnrollmentDetailPage = () => {
       if (res.success) {
         message.success("Đã đánh dấu hoàn thành bài giảng");
         await fetchEnrollmentDetail();
+
+        if (currentVideo) {
+          setCurrentVideo((prev) => ({
+            ...prev,
+            isCompleted: true,
+          }));
+        }
       } else {
         message.warning(res.message);
       }

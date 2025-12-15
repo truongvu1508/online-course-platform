@@ -12,8 +12,6 @@ const CourseAdminPage = () => {
   const [pageSize, setPageSize] = useState(5);
   const [total, setTotal] = useState(0);
   const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
-  const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
-  const [dataUpdate, setDataUpdate] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [filterCategory, setFilterCategory] = useState(null);
 
@@ -89,8 +87,6 @@ const CourseAdminPage = () => {
         setDataCourses={setDataCourses}
         loading={loading}
         loadCourse={loadCourse}
-        setIsModalUpdateOpen={setIsModalUpdateOpen}
-        setDataUpdate={setDataUpdate}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         pageSize={pageSize}

@@ -313,18 +313,21 @@ const Header = () => {
                       aria-haspopup="true"
                       aria-expanded={open ? "true" : undefined}
                     >
-                      <Avatar
-                        src={
-                          user.avatar ||
-                          "https://res.cloudinary.com/dopxef4b6/image/upload/v1758810804/DuxProject/users/avatars/j0rmvon92t1dhujbanxh.png"
-                        }
-                        sx={{
-                          width: 32,
-                          height: 32,
-                          border: "2px solid #fff",
-                          boxShadow: "0 2px 4px rgba(0,0,0,0.3)",
-                        }}
-                      />
+                      {user.avatar ? (
+                        <Avatar
+                          src={user.avatar}
+                          sx={{
+                            width: 32,
+                            height: 32,
+                            border: "2px solid #fff",
+                            boxShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                          }}
+                        />
+                      ) : (
+                        <div className="w-[32px] h-[32px] rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-2xl font-semibold">
+                          {user?.fullName?.charAt(0)?.toUpperCase() || "?"}
+                        </div>
+                      )}
                     </IconButton>
                   </Tooltip>
                 </Box>
@@ -369,19 +372,22 @@ const Header = () => {
                   anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
                 >
                   <MenuItem onClick={handleClose}>
-                    <div className="flex items-center justify-center">
-                      <Avatar
-                        src={
-                          user.avatar ||
-                          "https://res.cloudinary.com/dopxef4b6/image/upload/v1758810804/DuxProject/users/avatars/j0rmvon92t1dhujbanxh.png"
-                        }
-                        sx={{
-                          width: 32,
-                          height: 32,
-                          border: "2px solid #fff",
-                          boxShadow: "0 2px 4px rgba(0,0,0,0.3)",
-                        }}
-                      />
+                    <div className="flex items-center justify-center gap-2">
+                      {user.avatar ? (
+                        <Avatar
+                          src={user.avatar}
+                          sx={{
+                            width: 32,
+                            height: 32,
+                            border: "2px solid #fff",
+                            boxShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                          }}
+                        />
+                      ) : (
+                        <div className="w-[32px] h-[32px] rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-2xl font-semibold">
+                          {user?.fullName?.charAt(0)?.toUpperCase() || "?"}
+                        </div>
+                      )}
                       <div className="flex flex-col">
                         <h3 className="text-sm">{user.fullName}</h3>
                         <span className="text-xs">{user.email}</span>
