@@ -18,7 +18,7 @@ const getAllOrdersService = async (
     const filter = {};
 
     if (status) {
-      if (!["pending", "completed", "cancelled", "refunded"].includes(status)) {
+      if (!["unpaid", "paid", "cancelled", "refunded"].includes(status)) {
         throw new Error("Trạng thái đơn hàng không hợp lệ");
       }
       filter.status = status;

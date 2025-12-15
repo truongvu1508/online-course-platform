@@ -60,6 +60,12 @@ export const COURSE_EXACT_MATCH_FIELDS = [
   "instructorId",
 ];
 
-export const CHAPTER_SEARCHABLE_FIELDS = ["title", "description"];
+export const CHAPTER_SEARCHABLE_FIELDS = ["title", "description", "courseId"];
 
-export const LECTURE_SEARCHABLE_FIELDS = ["title", "description", "content"];
+export const LECTURE_SEARCHABLE_FIELDS = [
+  "title",
+  "description",
+  "content",
+  "courseId",
+  "chapterId",
+];

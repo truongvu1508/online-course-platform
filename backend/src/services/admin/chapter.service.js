@@ -17,10 +17,19 @@ const getAllChaptersService = async (limit, page, queryString) => {
 
       delete filter.page;
       let offset = (page - 1) * limit;
+
+      const courseIdFilter = filter.courseId;
+      delete filter.courseId;
+
       const processedFilter = processPartialSearch(
         filter,
         CHAPTER_SEARCHABLE_FIELDS
       );
+
+      // object id nen exact match
+      if (courseIdFilter) {
+        processedFilter.courseId = courseIdFilter;
+      }
 
       const [chapters, totalChapters] = await Promise.all([
         Chapter.find(processedFilter)
