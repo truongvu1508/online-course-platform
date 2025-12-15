@@ -3,14 +3,13 @@ import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import { deleteCourseByIdService } from "../../../services/admin/course.service";
 import { getAllCategoryService } from "../../../services/admin/category.service";
+import { useNavigate } from "react-router-dom";
 
 const TableCourse = (props) => {
   const {
     dataCourses,
     loading,
     loadCourse,
-    setIsModalUpdateOpen,
-    setDataUpdate,
     currentPage,
     setCurrentPage,
     pageSize,
@@ -22,6 +21,7 @@ const TableCourse = (props) => {
 
   const { message, notification } = App.useApp();
   const [categories, setCategories] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadCategories();
@@ -175,6 +175,7 @@ const TableCourse = (props) => {
             size="small"
             icon={<EyeOutlined />}
             className="rounded-lg"
+            onClick={() => handleViewDetail(record)}
           >
             Chi Tiết
           </Button>
@@ -200,6 +201,10 @@ const TableCourse = (props) => {
       ),
     },
   ];
+
+  const handleViewDetail = (record) => {
+    navigate(`/admin/khoa-hoc/${record._id}`);
+  };
 
   const handleTableChange = (pagination, filters) => {
     setCurrentPage(pagination.current);

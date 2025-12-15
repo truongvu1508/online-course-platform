@@ -14,7 +14,7 @@ const CourseCard = ({ course }) => {
 
   return (
     <div
-      className="course-card bg-white rounded-md hover:shadow-primary shadow-ms hover:shadow-lg transition-all duration-300 cursor-pointer"
+      className="course-card h-full bg-white rounded-md hover:shadow-primary shadow-lg hover:shadow-lg transition-all duration-300 cursor-pointer"
       onClick={handleCardClick}
     >
       <div className="w-full h-50 overflow-hidden rounded-t-md relative">

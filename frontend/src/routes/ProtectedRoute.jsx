@@ -1,9 +1,18 @@
 import { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { AuthContext } from "../contexts/auth.context";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const ProtectedRoute = ({ children, requiredRole }) => {
-  const { user } = useContext(AuthContext);
+  const { user, appLoading } = useContext(AuthContext);
+
+  if (appLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <CircularProgress />
+      </div>
+    );
+  }
 
   if (!user.id) {
     return <Navigate to="/dang-nhap" replace />;

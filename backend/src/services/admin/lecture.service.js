@@ -19,19 +19,28 @@ const getAllLecturesService = async (limit, page, queryString) => {
 
       delete filter.page;
       let offset = (page - 1) * limit;
+
+      const chapterIdFilter = filter.chapterId;
+      delete filter.chapterId;
+
       const processedFilter = processPartialSearch(
         filter,
         LECTURE_SEARCHABLE_FIELDS
       );
 
+      // object id nen exact match
+      if (chapterIdFilter) {
+        processedFilter.chapterId = chapterIdFilter;
+      }
       const [lectures, totalLectures] = await Promise.all([
         Lecture.find(processedFilter)
           .select(selectedFields)
           .populate("chapterId", "title description")
           .populate("courseId", "title slug description")
           .limit(limit)
-          .offset(offset)
+          .skip(offset)
           .exec(),
+        Lecture.countDocuments(processedFilter),
       ]);
 
       result = {

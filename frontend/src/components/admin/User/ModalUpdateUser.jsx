@@ -1,4 +1,4 @@
-import { App, Form, Input, Modal, Select, Upload } from "antd";
+import { App, Button, Form, Input, Modal, Select, Upload } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { updateUserByIdService } from "../../../services/admin/user.service";
@@ -26,6 +26,8 @@ const ModalUpdateUser = (props) => {
         phone: dataUpdate.phone,
         role: dataUpdate.role,
       });
+      // Set preview image to existing avatar
+      setPreviewImage(dataUpdate.avatar || null);
     }
   }, [dataUpdate, isModalUpdateOpen, form]);
 
@@ -35,7 +37,7 @@ const ModalUpdateUser = (props) => {
 
       const formData = new FormData();
 
-      // Only append fields that have values
+      // chi them vao formdata nhung truong can cap nhat
       if (values.email && values.email !== dataUpdate.email) {
         formData.append("email", values.email.trim());
       }
@@ -49,12 +51,11 @@ const ModalUpdateUser = (props) => {
         formData.append("role", values.role);
       }
 
-      // Only append password if it's provided
+      // chi them mat khau vao formdata neu duoc cung cap
       if (values.password) {
         formData.append("password", values.password);
       }
 
-      // Handle avatar upload
       if (values.avatar?.[0]?.originFileObj) {
         formData.append("avatar", values.avatar[0].originFileObj);
       }
@@ -97,6 +98,34 @@ const ModalUpdateUser = (props) => {
     form.resetFields();
   };
 
+  const handleFileChange = ({ fileList }) => {
+    if (fileList.length > 0) {
+      const file = fileList[0].originFileObj;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPreviewImage(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewImage(dataUpdate?.avatar || null);
+    }
+  };
+
+  // validate dinh dang va kich thuoc
+  const beforeUpload = (file) => {
+    const isImage = file.type.startsWith("image/");
+    if (!isImage) {
+      message.error("Bạn chỉ có thể tải lên file ảnh!");
+      return Upload.LIST_IGNORE;
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error("Ảnh phải nhỏ hơn 2MB!");
+      return Upload.LIST_IGNORE;
+    }
+    return false;
+  };
+
   console.log(previewImage);
 
   return (
@@ -127,6 +156,47 @@ const ModalUpdateUser = (props) => {
             onFinish={handleUpdateUser}
             className="space-y-1"
           >
+            <div className="mb-6 flex flex-col items-center">
+              <div className="mb-4">
+                {previewImage ? (
+                  <img
+                    src={previewImage}
+                    alt="Avatar"
+                    className="w-24 h-24 rounded-full object-cover border-2 border-gray-200"
+                  />
+                ) : (
+                  <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-2xl font-semibold">
+                    {dataUpdate?.fullName?.charAt(0)?.toUpperCase() || "?"}
+                  </div>
+                )}
+              </div>
+
+              <Form.Item
+                name="avatar"
+                valuePropName="fileList"
+                getValueFromEvent={(e) => {
+                  if (Array.isArray(e)) {
+                    return e;
+                  }
+                  return e?.fileList;
+                }}
+                className="mb-0 text-center"
+              >
+                <Upload
+                  listType="text"
+                  maxCount={1}
+                  beforeUpload={beforeUpload}
+                  onChange={handleFileChange}
+                  disabled={loading}
+                >
+                  <Button className="px-4 py-2 rounded-lg " disabled={loading}>
+                    <PlusOutlined className="mr-2" />
+                    Chọn ảnh đại diện
+                  </Button>
+                </Upload>
+              </Form.Item>
+            </div>
+
             <Form.Item
               name="email"
               label={<span className="font-medium text-gray-700">Email</span>}
