@@ -5,8 +5,8 @@ import { updateChapterService } from "../../../services/admin/chapter.service";
 
 const ModalUpdateChapter = (props) => {
   const {
-    isModalUpdateOpen,
-    setIsModalUpdateOpen,
+    isModalUpdateChapterOpen,
+    setIsModalUpdateChapterOpen,
     dataUpdateChapter,
     setDataUpdateChapter,
     fetchCourseDetail,
@@ -16,13 +16,13 @@ const ModalUpdateChapter = (props) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    if (dataUpdateChapter && isModalUpdateOpen) {
+    if (dataUpdateChapter && isModalUpdateChapterOpen) {
       form.setFieldsValue({
         title: dataUpdateChapter.title,
         description: dataUpdateChapter.description,
       });
     }
-  }, [dataUpdateChapter, isModalUpdateOpen, form]);
+  }, [dataUpdateChapter, isModalUpdateChapterOpen, form]);
 
   const handleUpdateChapter = async (values) => {
     try {
@@ -57,7 +57,7 @@ const ModalUpdateChapter = (props) => {
   };
 
   const handleCloseAndResetModal = () => {
-    setIsModalUpdateOpen(false);
+    setIsModalUpdateChapterOpen(false);
     setDataUpdateChapter(null);
     form.resetFields();
   };
@@ -68,7 +68,7 @@ const ModalUpdateChapter = (props) => {
           Cập nhật chương học
         </div>
       }
-      open={isModalUpdateOpen}
+      open={isModalUpdateChapterOpen}
       onOk={handleModalOk}
       onCancel={handleCloseAndResetModal}
       okText="Cập nhật"

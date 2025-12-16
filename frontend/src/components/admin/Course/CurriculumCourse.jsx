@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -10,11 +11,23 @@ import { useState } from "react";
 import ModalCreateChapter from "../Chapter/ModalCreateChapter";
 import ModalUpdateChapter from "../Chapter/ModalUpdateChapter";
 import { deleteChapterService } from "../../../services/admin/chapter.service";
+import ModalCreateLecture from "../Lecture/ModalCreateLecture";
+import ModalUpdateLecture from "../Lecture/ModalUpdateLecture";
+import { deleteLectureService } from "../../../services/admin/lecture.service";
 
 const CurriculumCourse = ({ curriculum, fetchCourseDetail, courseId }) => {
-  const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
-  const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
+  const [isModalCreateChapterOpen, setIsModalCreateChapterOpen] =
+    useState(false);
+  const [isModalUpdateChapterOpen, setIsModalUpdateChapterOpen] =
+    useState(false);
   const [dataUpdateChapter, setDataUpdateChapter] = useState(null);
+
+  const [isModalCreateLectureOpen, setIsModalCreateLectureOpen] =
+    useState(false);
+  const [isModalUpdateLectureOpen, setIsModalUpdateLectureOpen] =
+    useState(false);
+  const [dataUpdateLecture, setDataUpdateLecture] = useState(null);
+  const [selectedChapterId, setSelectedChapterId] = useState(null);
   const { message } = App.useApp();
 
   const handleDeleteChapter = async (id) => {
@@ -24,6 +37,17 @@ const CurriculumCourse = ({ curriculum, fetchCourseDetail, courseId }) => {
       await fetchCourseDetail();
     } catch (error) {
       message.error("Xóa chương học thất bại");
+      console.error(error);
+    }
+  };
+
+  const handleDeleteLecture = async (id) => {
+    try {
+      await deleteLectureService(id);
+      message.success("Xóa bài giảng thành công");
+      await fetchCourseDetail();
+    } catch (error) {
+      message.error("Xóa bài giảng thất bại");
       console.error(error);
     }
   };
@@ -39,7 +63,7 @@ const CurriculumCourse = ({ curriculum, fetchCourseDetail, courseId }) => {
             type="primary"
             size="large"
             className="rounded-lg"
-            onClick={() => setIsModalCreateOpen(true)}
+            onClick={() => setIsModalCreateChapterOpen(true)}
           >
             Thêm chương học
           </Button>
@@ -63,7 +87,7 @@ const CurriculumCourse = ({ curriculum, fetchCourseDetail, courseId }) => {
                         onClick={(e) => {
                           e.stopPropagation();
                           setDataUpdateChapter(section);
-                          setIsModalUpdateOpen(true);
+                          setIsModalUpdateChapterOpen(true);
                         }}
                       >
                         Sửa
@@ -105,6 +129,41 @@ const CurriculumCourse = ({ curriculum, fetchCourseDetail, courseId }) => {
                           <span className="text-sm text-gray-600">
                             {formatTime(lecture.videoDuration)}
                           </span>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              size="small"
+                              type="link"
+                              icon={<EditOutlined />}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setDataUpdateLecture(lecture);
+                                setIsModalUpdateLectureOpen(true);
+                              }}
+                            >
+                              Sửa
+                            </Button>
+                            <Popconfirm
+                              placement="topRight"
+                              title="Xác nhận xóa?"
+                              description={`Bạn có chắc muốn xóa bài giảng "${lecture.title}"?`}
+                              onConfirm={(e) => {
+                                e.stopPropagation();
+                                handleDeleteLecture(lecture._id);
+                              }}
+                              okText="Xóa"
+                              cancelText="Hủy"
+                              okButtonProps={{ danger: true }}
+                            >
+                              <Button
+                                size="small"
+                                type="link"
+                                danger
+                                icon={<DeleteOutlined />}
+                              >
+                                Xóa
+                              </Button>
+                            </Popconfirm>
+                          </div>
                         </div>
                       </div>
                     ))
@@ -113,6 +172,17 @@ const CurriculumCourse = ({ curriculum, fetchCourseDetail, courseId }) => {
                       Chưa có bài giảng
                     </p>
                   )}
+
+                  <Button
+                    type="dashed"
+                    onClick={() => {
+                      setSelectedChapterId(section._id);
+                      setIsModalCreateLectureOpen(true);
+                    }}
+                    className="mt-2"
+                  >
+                    Thêm bài giảng
+                  </Button>
                 </div>
               </AccordionDetails>
             </Accordion>
@@ -122,18 +192,36 @@ const CurriculumCourse = ({ curriculum, fetchCourseDetail, courseId }) => {
 
       <ModalCreateChapter
         courseId={courseId}
-        isModalCreateOpen={isModalCreateOpen}
-        setIsModalCreateOpen={setIsModalCreateOpen}
+        isModalCreateChapterOpen={isModalCreateChapterOpen}
+        setIsModalCreateChapterOpen={setIsModalCreateChapterOpen}
         fetchCourseDetail={fetchCourseDetail}
       />
 
       <ModalUpdateChapter
         courseId={courseId}
-        isModalUpdateOpen={isModalUpdateOpen}
-        setIsModalUpdateOpen={setIsModalUpdateOpen}
+        isModalUpdateChapterOpen={isModalUpdateChapterOpen}
+        setIsModalUpdateChapterOpen={setIsModalUpdateChapterOpen}
         fetchCourseDetail={fetchCourseDetail}
         dataUpdateChapter={dataUpdateChapter}
         setDataUpdateChapter={setDataUpdateChapter}
+      />
+
+      <ModalCreateLecture
+        courseId={courseId}
+        chapterId={selectedChapterId}
+        isModalCreateLectureOpen={isModalCreateLectureOpen}
+        setIsModalCreateLectureOpen={setIsModalCreateLectureOpen}
+        fetchCourseDetail={fetchCourseDetail}
+      />
+
+      <ModalUpdateLecture
+        courseId={courseId}
+        chapterId={selectedChapterId}
+        isModalUpdateLectureOpen={isModalUpdateLectureOpen}
+        setIsModalUpdateLectureOpen={setIsModalUpdateLectureOpen}
+        fetchCourseDetail={fetchCourseDetail}
+        dataUpdateLecture={dataUpdateLecture}
+        setDataUpdateLecture={setDataUpdateLecture}
       />
     </>
   );

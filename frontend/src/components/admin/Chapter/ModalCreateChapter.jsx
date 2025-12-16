@@ -5,8 +5,8 @@ import { createChapterService } from "../../../services/admin/chapter.service";
 
 const ModalCreateChapter = (props) => {
   const {
-    isModalCreateOpen,
-    setIsModalCreateOpen,
+    isModalCreateChapterOpen,
+    setIsModalCreateChapterOpen,
     fetchCourseDetail,
     courseId,
   } = props;
@@ -53,7 +53,7 @@ const ModalCreateChapter = (props) => {
   };
 
   const handleCloseAndResetModal = () => {
-    setIsModalCreateOpen(false);
+    setIsModalCreateChapterOpen(false);
     form.resetFields();
   };
 
@@ -64,7 +64,7 @@ const ModalCreateChapter = (props) => {
           Tạo mới chương học
         </div>
       }
-      open={isModalCreateOpen}
+      open={isModalCreateChapterOpen}
       onOk={handleModalOk}
       onCancel={handleCloseAndResetModal}
       okText="Tạo mới"
