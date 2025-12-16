@@ -4,6 +4,7 @@ import {
   processPartialSearch,
   USER_SEARCHABLE_FIELDS,
 } from "../../utils/query.helper.js";
+import bcrypt from "bcryptjs";
 
 const selectedFields = "_id email fullName phone avatar role lastLoginAt";
 
@@ -84,6 +85,14 @@ const createUserService = async (userData) => {
 
 const updateUserService = async (userId, userDataUpdate) => {
   try {
+    if (userDataUpdate.password) {
+      const hashedPassword = await bcrypt.hash(
+        userDataUpdate.password,
+        parseInt(process.env.SALT_ROUNDS)
+      );
+      userDataUpdate.password = hashedPassword;
+    }
+
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { $set: userDataUpdate },

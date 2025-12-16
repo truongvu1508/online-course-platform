@@ -404,12 +404,6 @@ const Header = () => {
                     </div>
                   </MenuItem>
                   <Divider />
-                  <MenuItem onClick={handleClose} className="text-sm">
-                    <ListItemIcon>
-                      <AccountCircleIcon fontSize="small" />
-                    </ListItemIcon>
-                    Thông tin tài khoản
-                  </MenuItem>
 
                   {user.role === "ADMIN" ? (
                     <MenuItem onClick={() => navigate("/admin")}>
@@ -419,12 +413,27 @@ const Header = () => {
                       Trang quản trị
                     </MenuItem>
                   ) : (
-                    <MenuItem onClick={() => navigate("/khoa-hoc-cua-toi")}>
-                      <ListItemIcon>
-                        <MenuBookIcon fontSize="small" />
-                      </ListItemIcon>
-                      Khóa học của tôi
-                    </MenuItem>
+                    [
+                      <MenuItem
+                        key="profile"
+                        onClick={() => navigate("/ho-so")}
+                        className="text-sm"
+                      >
+                        <ListItemIcon>
+                          <AccountCircleIcon fontSize="small" />
+                        </ListItemIcon>
+                        Thông tin tài khoản
+                      </MenuItem>,
+                      <MenuItem
+                        key="courses"
+                        onClick={() => navigate("/khoa-hoc-cua-toi")}
+                      >
+                        <ListItemIcon>
+                          <MenuBookIcon fontSize="small" />
+                        </ListItemIcon>
+                        Khóa học của tôi
+                      </MenuItem>,
+                    ]
                   )}
                   <Divider />
                   <MenuItem onClick={handleLogout}>

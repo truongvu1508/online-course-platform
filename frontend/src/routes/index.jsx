@@ -18,6 +18,7 @@ import CourseDetailPage from "../pages/site/CourseDetail";
 import EnrollmentPage from "../pages/site/Enrollment";
 import EnrollmentDetailPage from "../pages/site/EnrollmentDetail";
 import CourseDetailAdminPage from "../pages/admin/Course/CourseDetail";
+import ProfilePage from "../pages/site/Profile";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute requiredRole="STUDENT">
             <EnrollmentDetailPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "ho-so",
+        element: (
+          <ProtectedRoute requiredRole="STUDENT">
+            <ProfilePage />
           </ProtectedRoute>
         ),
       },
