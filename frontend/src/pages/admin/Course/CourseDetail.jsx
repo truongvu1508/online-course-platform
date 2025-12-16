@@ -8,21 +8,32 @@ import Tabs from "@mui/material/Tabs";
 import DetailCourse from "../../../components/admin/Course/DetailCourse";
 import CurriculumCourse from "../../../components/admin/Course/CurriculumCourse";
 import EnrollmentCourse from "../../../components/admin/Course/EnrollmentCourse";
-import { Spin } from "antd";
+import { App, Spin } from "antd";
+import { getEnrollmentCourse } from "../../../services/admin/enrollment.service";
 
 const CourseDetailAdminPage = () => {
   const { id } = useParams();
   const [course, setCourse] = useState(null);
+  const [enrollment, setEnrollment] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingEnrollment, setLoadingEnrollment] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
+  const { notification } = App.useApp();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     fetchCourseDetail();
   }, []);
 
+  useEffect(() => {
+    fetchEnrollmentCourse();
+  }, [currentPage, pageSize]);
+
   const fetchCourseDetail = async () => {
     try {
-      setLoading(true);
+      setLoadingEnrollment(true);
 
       const res = await getCourseByIdService(id);
 
@@ -30,9 +41,43 @@ const CourseDetailAdminPage = () => {
         setCourse(res.data);
       } else {
         console.log(res.message);
+        notification.error({
+          message: "Không thể lấy thông tin chi tiết khóa học",
+          description: res.message,
+        });
       }
     } catch (error) {
-      console.error(error);
+      notification.error({
+        message: "Không thể lấy thông tin chi tiết khóa học",
+        description: error,
+      });
+    } finally {
+      setLoadingEnrollment(false);
+    }
+  };
+
+  const fetchEnrollmentCourse = async () => {
+    try {
+      setLoading(true);
+
+      const res = await getEnrollmentCourse(id, currentPage, pageSize);
+
+      if (res.success) {
+        setEnrollment(res.data);
+        setCurrentPage(res.pagination.page);
+        setPageSize(res.pagination.limit);
+        setTotal(res.pagination.total);
+      } else {
+        notification.error({
+          message: "Không thể lấy thông tin chi tiết khóa học",
+          description: res.message,
+        });
+      }
+    } catch (error) {
+      notification.error({
+        message: "Không thể lấy thông tin chi tiết khóa học",
+        description: error,
+      });
     } finally {
       setLoading(false);
     }
@@ -69,7 +114,17 @@ const CourseDetailAdminPage = () => {
           />
         );
       case 2:
-        return <EnrollmentCourse />;
+        return (
+          <EnrollmentCourse
+            loadingEnrollment={loadingEnrollment}
+            enrollment={enrollment}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            pageSize={pageSize}
+            setPageSize={setPageSize}
+            total={total}
+          />
+        );
       default:
         return null;
     }

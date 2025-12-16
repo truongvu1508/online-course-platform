@@ -11,7 +11,6 @@ import AdminLayout from "../layouts/AdminLayout";
 import DashboardPage from "../pages/admin/Dashboard";
 import CourseAdminPage from "../pages/admin/Course";
 import OrderAdminPage from "../pages/admin/Order";
-import StudentAdminPage from "../pages/admin/Student";
 import CategoryAdminPage from "../pages/admin/Category";
 import UserAdminPage from "../pages/admin/User";
 import ProtectedRoute from "./ProtectedRoute";
@@ -19,6 +18,7 @@ import CourseDetailPage from "../pages/site/CourseDetail";
 import EnrollmentPage from "../pages/site/Enrollment";
 import EnrollmentDetailPage from "../pages/site/EnrollmentDetail";
 import CourseDetailAdminPage from "../pages/admin/Course/CourseDetail";
+import ProfilePage from "../pages/site/Profile";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +44,14 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+      {
+        path: "ho-so",
+        element: (
+          <ProtectedRoute requiredRole="STUDENT">
+            <ProfilePage />
+          </ProtectedRoute>
+        ),
+      },
       { path: "gioi-thieu", element: <AboutPage /> },
       { path: "lien-he", element: <ContactPage /> },
     ],
@@ -61,7 +69,6 @@ const router = createBrowserRouter([
       { path: "khoa-hoc", element: <CourseAdminPage /> },
       { path: "khoa-hoc/:id", element: <CourseDetailAdminPage /> },
       { path: "don-hang", element: <OrderAdminPage /> },
-      { path: "hoc-vien", element: <StudentAdminPage /> },
       { path: "nguoi-dung", element: <UserAdminPage /> },
     ],
   },
