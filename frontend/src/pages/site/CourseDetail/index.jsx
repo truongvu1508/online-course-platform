@@ -25,6 +25,7 @@ import { addToCardService } from "../../../services/student/cart.service";
 import { CartContext } from "../../../contexts/cart.context";
 import { orderNowService } from "../../../services/student/order.service";
 import YouTube from "react-youtube";
+import Flag from "react-world-flags";
 
 const CourseDetailPage = () => {
   const { refreshCart } = useContext(CartContext);
@@ -101,8 +102,24 @@ const CourseDetailPage = () => {
   };
 
   const COURSE_LANGUAGES = [
-    { value: "vi", label: "Tiếng Việt" },
-    { value: "en", label: "Tiếng Anh" },
+    {
+      value: "vi",
+      label: (
+        <div className="flex items-center gap-2">
+          <Flag code="VN" style={{ width: 30, height: 20 }} />
+          <p>Tiếng Việt</p>
+        </div>
+      ),
+    },
+    {
+      value: "en",
+      label: (
+        <div className="flex items-center gap-2">
+          <Flag code="GB" style={{ width: 30, height: 20 }} />
+          <p>Tiếng Anh</p>
+        </div>
+      ),
+    },
   ];
 
   if (loading) {
@@ -203,16 +220,16 @@ const CourseDetailPage = () => {
             </p>
             <div className="flex items-center gap-2 text-sm">
               <FaGlobe />
-              <span>
-                Ngôn ngữ:{" "}
+              <div className="flex items-center gap-2">
+                <span>Ngôn ngữ:</span>
                 {COURSE_LANGUAGES.map((courseLanguage) =>
                   courseLanguage.value === course.language ? (
-                    <span key={courseLanguage.value}>
+                    <div key={courseLanguage.value} className="text-white">
                       {courseLanguage.label}
-                    </span>
+                    </div>
                   ) : null
                 )}
-              </span>
+              </div>
             </div>
           </div>
           <div className="col-span-4 relative">

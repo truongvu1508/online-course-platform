@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { getAllCourseService } from "../../../services/admin/course.service";
 import TableCourse from "../../../components/admin/Course/TableCourse";

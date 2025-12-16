@@ -34,7 +34,6 @@ const getAllChaptersService = async (limit, page, queryString) => {
       const [chapters, totalChapters] = await Promise.all([
         Chapter.find(processedFilter)
           .select(selectedFields)
-          .populate("courseId", "title slug description")
           .limit(limit)
           .skip(offset)
           .sort({ createdAt: -1 })
@@ -52,7 +51,6 @@ const getAllChaptersService = async (limit, page, queryString) => {
     } else {
       const chapters = await Chapter.find({})
         .select(selectedFields)
-        .populate("courseId", "title slug description")
         .sort({ createdAt: -1 })
         .exec();
 

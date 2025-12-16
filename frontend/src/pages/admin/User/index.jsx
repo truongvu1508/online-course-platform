@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { getAllUserService } from "../../../services/admin/user.service";
 import TableUser from "../../../components/admin/User/TableUser";
