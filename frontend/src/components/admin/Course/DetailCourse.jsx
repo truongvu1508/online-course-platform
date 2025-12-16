@@ -1,9 +1,28 @@
 import React, { useState } from "react";
 import { Button, Divider, Spin, Tag } from "antd";
 import UpdateCourse from "./UpdateCourse";
+import Flag from "react-world-flags";
 
 const DetailCourse = ({ course, fetchCourseDetail }) => {
   const [isEditing, setIsEditing] = useState(false);
+
+  const getLevelLabel = (level) => {
+    const levelMap = {
+      beginner: { text: "Cơ bản", color: "blue" },
+      intermediate: { text: "Trung cấp", color: "orange" },
+      advanced: { text: "Trình độ cao", color: "red" },
+    };
+    return levelMap[level] || { text: level, color: "default" };
+  };
+
+  const getStatusCourseLabel = (status) => {
+    const levelMap = {
+      draft: { text: "Bản nháp", color: "default" },
+      published: { text: "Đã xuất bản", color: "green" },
+      archived: { text: "Đã lưu trữ", color: "orange" },
+    };
+    return levelMap[status] || { text: status, color: "default" };
+  };
 
   if (!course) {
     return (
@@ -53,16 +72,24 @@ const DetailCourse = ({ course, fetchCourseDetail }) => {
               </h3>
               <p className="text-gray-600 mb-2">{course.shortDescription}</p>
               <div className="flex gap-2 flex-wrap">
-                <Tag color="blue">{course.level}</Tag>
-                <Tag color="cyan">
-                  {course.language === "vi" ? "Tiếng Việt" : "Tiếng Anh"}
+                {course.language === "vi" ? (
+                  <div className="flex items-center gap-2">
+                    <Flag code="VN" style={{ width: 30, height: 20 }} />
+                    <p className="text-gray-600">Tiếng Việt</p>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <Flag code="GB" style={{ width: 30, height: 20 }} />
+                    <p className="text-gray-600">Tiếng Anh</p>
+                  </div>
+                )}
+                <Divider type="vertical" style={{ height: 20 }} />
+                <Tag color={getLevelLabel(course.level).color}>
+                  {getLevelLabel(course.level).text}
                 </Tag>
-                <Tag color={course.status === "published" ? "green" : "orange"}>
-                  {course.status === "published"
-                    ? "Đã xuất bản"
-                    : course.status === "draft"
-                    ? "Bản nháp"
-                    : "Đã lưu trữ"}
+                <Divider type="vertical" style={{ height: 20 }} />
+                <Tag color={getStatusCourseLabel(course.status).color}>
+                  {getStatusCourseLabel(course.status).text}
                 </Tag>
               </div>
             </div>

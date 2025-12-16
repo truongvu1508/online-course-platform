@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getCourseByIdService } from "../../../services/admin/course.service";
@@ -60,7 +61,13 @@ const CourseDetailAdminPage = () => {
           />
         );
       case 1:
-        return <CurriculumCourse courseId={id} />;
+        return (
+          <CurriculumCourse
+            courseId={id}
+            curriculum={course.curriculum}
+            fetchCourseDetail={fetchCourseDetail}
+          />
+        );
       case 2:
         return <EnrollmentCourse />;
       default:
