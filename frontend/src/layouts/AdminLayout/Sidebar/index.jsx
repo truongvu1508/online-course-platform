@@ -5,7 +5,6 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
-import SchoolIcon from "@mui/icons-material/School";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AnalyticsIcon from "@mui/icons-material/Analytics";
 import PersonIcon from "@mui/icons-material/Person";
@@ -38,11 +37,6 @@ const Sidebar = () => {
       title: "Khóa học",
       icon: <AutoStoriesIcon />,
       path: "/admin/khoa-hoc",
-    },
-    {
-      title: "Học viên",
-      icon: <SchoolIcon />,
-      path: "/admin/hoc-vien",
     },
     {
       title: "Đơn hàng",
