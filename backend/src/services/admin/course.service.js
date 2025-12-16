@@ -5,6 +5,8 @@ import {
   COURSE_SEARCHABLE_FIELDS,
   COURSE_EXACT_MATCH_FIELDS,
 } from "../../utils/query.helper.js";
+import Chapter from "../../models/chapter.model.js";
+import Lecture from "../../models/lecture.model.js";
 
 const selectedFields =
   "_id title slug description shortDescription thumbnail previewVideo instructorId categoryId level language price discount finalPrice requirements totalLectures totalDuration totalStudents totalReviews averageRating status isPublished publishedAt createdAt updatedAt";
@@ -69,11 +71,44 @@ const getCourseByIdService = async (courseId) => {
       .select(selectedFields)
       .populate("instructorId", "fullName email avatar")
       .populate("categoryId", "name slug description")
-      .exec();
+      .lean();
 
-    return course;
+    if (!course) {
+      return null;
+    }
+
+    const chapters = await Chapter.find({ courseId: course._id })
+      .sort({ order: 1 })
+      .lean();
+
+    const lectures = await Lecture.find({ courseId: course._id })
+      .sort({ order: 1 })
+      .lean();
+
+    const chaptersWithLectures = chapters.map((chapter) => ({
+      ...chapter,
+      lectures: lectures
+        .filter(
+          (lecture) => lecture.chapterId.toString() === chapter._id.toString()
+        )
+        .map((lecture) => ({
+          _id: lecture._id,
+          title: lecture.title,
+          description: lecture.description,
+          order: lecture.order,
+          videoDuration: lecture.videoDuration,
+          videoUrl: lecture.videoUrl,
+          content: lecture.content,
+          isFree: lecture.isFree,
+        })),
+    }));
+
+    return {
+      ...course,
+      curriculum: chaptersWithLectures,
+    };
   } catch (error) {
-    throw new Error("Không thể tải thông tin khóa học");
+    throw new Error(error);
   }
 };
 
