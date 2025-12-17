@@ -6,10 +6,12 @@ import chapterRoutes from "./chapter.route.js";
 import lectureRoutes from "./lecture.route.js";
 import orderRoutes from "./order.route.js";
 import enrollmentRoutes from "./enrollment.route.js";
+import dashboardRoutes from "./dashboard.route.js";
 
 const router = express.Router();
 
 // admin routes - private
+router.use("/dashboard", dashboardRoutes);
 router.use("/users", userRoutes);
 router.use("/courses", courseRoutes);
 router.use("/categories", categoryRoutes);
