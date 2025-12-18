@@ -7,7 +7,7 @@ import Enrollment from "../../models/enrollment.model.js";
 // GET /admin/dashboard/stats
 const getStats = async (req, res) => {
   try {
-    const totalStudents = await User.countDocuments({ role: "student" });
+    const totalStudents = await User.countDocuments({ role: "STUDENT" });
 
     const totalCourses = await Course.countDocuments();
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { App, Button, Form, Input, Upload, Spin } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import {
@@ -6,8 +6,10 @@ import {
   updateProfileService,
 } from "../../../services/student/user.service";
 import CircularProgress from "@mui/material/CircularProgress";
+import { AuthContext } from "../../../contexts/auth.context";
 
 const ProfilePage = () => {
+  const { fetchAccountInfo } = useContext(AuthContext);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -80,6 +82,9 @@ const ProfilePage = () => {
         message.success("Cập nhật thông tin thành công");
         setIsEditing(false);
         await getProfile();
+
+        await fetchAccountInfo();
+
         form.setFieldValue("password", "");
       } else {
         notification.error({

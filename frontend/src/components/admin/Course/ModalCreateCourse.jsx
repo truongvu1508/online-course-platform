@@ -14,7 +14,8 @@ import { createCourseService } from "../../../services/admin/course.service";
 import { getAllCategoryService } from "../../../services/admin/category.service";
 
 const ModalCreateCourse = (props) => {
-  const { loadCourse, isModalCreateOpen, setIsModalCreateOpen } = props;
+  const { loadCourse, isModalCreateOpen, setIsModalCreateOpen, instructorId } =
+    props;
   const [form] = Form.useForm();
   const { message, notification } = App.useApp();
   const [loading, setLoading] = useState(false);
@@ -51,6 +52,7 @@ const ModalCreateCourse = (props) => {
       formData.append("description", values.description.trim());
       formData.append("shortDescription", values.shortDescription || "");
       formData.append("categoryId", values.categoryId);
+      formData.append("instructorId", instructorId);
       formData.append("level", values.level || "beginner");
       formData.append("language", values.language || "vi");
       formData.append("price", values.price || 0);

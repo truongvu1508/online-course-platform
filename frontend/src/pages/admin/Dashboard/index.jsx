@@ -22,6 +22,7 @@ import {
   getRevenueChartService,
   getStudentChartService,
 } from "../../../services/admin/dashboard.service";
+import { formatVND } from "../../../utils/formatters";
 
 const DashboardPage = () => {
   const [loading, setLoading] = useState(true);
@@ -193,7 +194,7 @@ const DashboardPage = () => {
       <div className="flex items-center gap-5">
         <p className="text-gray-500 text-sm mb-1">Tổng doanh thu</p>
         <p className="text-2xl font-bold text-primary">
-          {stats.totalRevenue} ₫
+          {formatVND(stats.totalRevenue)}
         </p>
       </div>
 

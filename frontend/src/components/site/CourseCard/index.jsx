@@ -38,13 +38,13 @@ const CourseCard = ({ course }) => {
         />
       </div>
       <div className="px-3 py-2">
-        <h3 className="text-lg font-[600] text-primary hover:text-primary-700 transition-colors duration-200">
+        <h3 className="text-lg truncate min-h-[3rem] font-[600] text-primary hover:text-primary-700 transition-colors duration-200">
           {course.title}
         </h3>
         <h4 className="text-sm text-primary-400 truncate">
           {course.shortDescription}
         </h4>
-        <div className="flex justify-between mt-2">
+        <div className="flex justify-between items-center mt-2">
           <p className="text-gray-500 text-base">CodeLearn</p>
           <div className="flex items-center gap-3">
             <div className="flex justify-center items-center gap-1">
@@ -62,7 +62,7 @@ const CourseCard = ({ course }) => {
             <p className="text-gray-500">({course.totalReviews})</p>
           </div>
         </div>
-        <div className="flex items-center justify-center text-sm gap-4 py-4 border-b border-primary">
+        <div className="flex items-center justify-between text-sm gap-2 py-4 border-b border-primary">
           <div className="flex items-center gap-2">
             <FaUserGraduate className="text-primary" />
             <p className="text-sm">

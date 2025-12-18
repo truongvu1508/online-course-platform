@@ -226,8 +226,9 @@ const Header = () => {
                           className="border-b border-gray-300 py-2"
                         >
                           <div className="flex items-center gap-2">
-                            <div className="w-[150px] relative">
+                            <div className="w-[100px] aspect-video relative flex-shrink-0">
                               <img
+                                className="object-cover w-full h-full rounded"
                                 src={cartItem.courseId.thumbnail}
                                 alt={cartItem.courseId.title}
                               />
@@ -242,7 +243,7 @@ const Header = () => {
                                 <p className="text-white">x</p>
                               </div>
                             </div>
-                            <div>
+                            <div className="flex-1">
                               <p className="mb-1 text-primary text-sm font-semibold line-clamp-2">
                                 {cartItem.courseId.title}
                               </p>

@@ -215,7 +215,7 @@ const CourseDetailPage = () => {
             <p className="text-sm mb-[16px]">
               Khóa học của{" "}
               <span className="text-primary-200 font-semibold underline cursor-pointer">
-                {course.instructorId.fullName}
+                CodeLearn
               </span>
             </p>
             <div className="flex items-center gap-2 text-sm">
@@ -253,7 +253,7 @@ const CourseDetailPage = () => {
                   <img
                     src={course.thumbnail}
                     alt={course.title}
-                    className="w-full h-full object-cover"
+                    className="w-[450px] h-full object-cover"
                   />
                 )}
 

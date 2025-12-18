@@ -5,8 +5,11 @@ import TableCourse from "../../../components/admin/Course/TableCourse";
 import ModalCreateCourse from "../../../components/admin/Course/ModalCreateCourse";
 import { Button, Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
+import { useContext } from "react";
+import { AuthContext } from "../../../contexts/auth.context";
 
 const CourseAdminPage = () => {
+  const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [dataCourses, setDataCourses] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -101,6 +104,7 @@ const CourseAdminPage = () => {
         loadCourse={loadCourse}
         isModalCreateOpen={isModalCreateOpen}
         setIsModalCreateOpen={setIsModalCreateOpen}
+        instructorId={user.id}
       />
     </>
   );

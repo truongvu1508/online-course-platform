@@ -49,7 +49,9 @@ export const AuthWrapper = (props) => {
   }, []);
 
   return (
-    <AuthContext value={{ user, setUser, appLoading, setAppLoading }}>
+    <AuthContext
+      value={{ user, setUser, appLoading, setAppLoading, fetchAccountInfo }}
+    >
       {props.children}
     </AuthContext>
   );

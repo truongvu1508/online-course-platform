@@ -160,7 +160,7 @@ const CoursesPage = () => {
             )}
           </div>
 
-          <Accordion defaultExpanded>
+          <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <h3 className="font-medium text-lg">Đánh giá</h3>
             </AccordionSummary>

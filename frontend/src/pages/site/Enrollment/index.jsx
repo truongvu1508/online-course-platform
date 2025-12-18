@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
 import { formatDate, formatVND } from "../../../utils/formatters";
+import { FaFileVideo } from "react-icons/fa";
 
 const EnrollmentPage = () => {
   const { message } = App.useApp();

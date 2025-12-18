@@ -27,11 +27,7 @@ const handleVNPayCallback = async (req, res) => {
     const order = await processVNPayCallback(callbackData);
 
     const isSuccess = order.paymentStatus === "completed";
-    const redirectUrl = `${
-      process.env.FRONTEND_URL
-    }/payment/result?orderNumber=${order.orderNumber}&status=${
-      isSuccess ? "success" : "failed"
-    }`;
+    const redirectUrl = `${process.env.FRONTEND_URL}/khoa-hoc-cua-toi`;
 
     return res.redirect(redirectUrl);
   } catch (error) {
