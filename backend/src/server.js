@@ -23,7 +23,7 @@ app.use(
   cors({
     origin: process.env.FRONTEND_URL,
     credentials: true,
-  })
+  }),
 );
 
 // init passport
@@ -45,20 +45,20 @@ routes(app);
     console.log("\n\x1b[32m%s\x1b[0m", "Server Started Successfully!");
     console.log(
       "\x1b[36m%s\x1b[0m",
-      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
     );
     console.log("  - Server:    " + `\x1b[37mhttp://localhost:${port}\x1b[0m`);
     console.log(
       "  - Frontend:  " +
-        `\x1b[37m${process.env.FRONTEND_URL || "Not configured"}\x1b[0m`
+        `\x1b[37m${process.env.FRONTEND_URL || "Not configured"}\x1b[0m`,
     );
     console.log("  - Database:  " + "\x1b[32mConnected ✓\x1b[0m");
     console.log(
-      "  - Time:      " + `\x1b[37m${new Date().toLocaleString()}\x1b[0m`
+      "  - Time:      " + `\x1b[37m${new Date().toLocaleString()}\x1b[0m`,
     );
     console.log(
       "\x1b[36m%s\x1b[0m",
-      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
     );
     console.log("\x1b[90m%s\x1b[0m\n", "Press CTRL+C to stop");
 
@@ -67,12 +67,12 @@ routes(app);
     console.log("\n\x1b[31m%s\x1b[0m", "Server Start Failed!");
     console.log(
       "\x1b[31m%s\x1b[0m",
-      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
     );
     console.log("  Error: " + `\x1b[37m${error.message}\x1b[0m`);
     console.log(
       "\x1b[31m%s\x1b[0m\n",
-      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
     );
     process.exit(1);
   }

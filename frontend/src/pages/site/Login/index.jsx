@@ -12,13 +12,20 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const fillDemoCredentials = (email, password) => {
+    form.setFieldsValue({
+      email,
+      password,
+    });
+  };
+
   const onFinish = async (values) => {
     try {
       setLoading(true);
 
       const res = await loginService(
         values.email.trim(),
-        values.password.trim()
+        values.password.trim(),
       );
 
       if (res.success) {
@@ -188,6 +195,38 @@ const LoginPage = () => {
               Đăng Ký Tài Khoản
             </Link>
           </span>
+        </div>
+        <div style={{ textAlign: "center", marginTop: "24px" }}>
+          <p
+            style={{
+              color: "#64748B",
+              fontSize: "14px",
+              marginBottom: "12px",
+              fontWeight: "500",
+            }}
+          >
+            Dùng thử ngay:
+          </p>
+          <div
+            style={{ display: "flex", gap: "12px", flexDirection: "column" }}
+          >
+            <Button
+              onClick={() =>
+                fillDemoCredentials("admin.demo@gmail.com", "Demo@123")
+              }
+              className="w-full h-[40px] rounded-[8px] text-sm font-[500] border border-gray-300 bg-gray-50 text-gray-600 hover:bg-blue-100"
+            >
+              Admin: admin.demo@gmail.com / Demo@123
+            </Button>
+            <Button
+              onClick={() =>
+                fillDemoCredentials("user.demo@gmail.com", "Demo@123")
+              }
+              className="w-full h-[40px] rounded-[8px] text-sm font-[500] border border-gray-300 bg-gray-50 text-gray-600 hover:bg-green-100"
+            >
+              User: user.demo@gmail.com / Demo@123
+            </Button>
+          </div>
         </div>
       </div>
     </div>
